@@ -2,6 +2,8 @@ import { Tabs } from "expo-router";
 import { Image, ImageSourcePropType, Text, View } from "react-native";
 
 import icons from "@/constants/icons";
+import { useGlobalStore } from "@/core/store";
+import { useEffect } from "react";
 
 const TabIcon = ({
   focused,
@@ -32,6 +34,17 @@ const TabIcon = ({
 );
 
 const TabsLayout = () => {
+
+  const socketConnect = useGlobalStore(state => state.socketConnect)
+	const socketClose = useGlobalStore(state => state.socketClose)
+
+  useEffect(() => {
+		socketConnect()
+		return () => {
+			socketClose()
+		}
+	}, [])
+  
   return (
     <Tabs
       screenOptions={{

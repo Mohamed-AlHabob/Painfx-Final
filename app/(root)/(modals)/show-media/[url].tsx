@@ -1,26 +1,71 @@
-import React from 'react';
-import { View, Image, StyleSheet } from 'react-native';
-import { useLocalSearchParams } from 'expo-router';
+import React, { useEffect, useState } from 'react';
+import { View, TouchableOpacity, Dimensions, Image as RNImage } from 'react-native';
+import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
+import { StatusBar } from 'expo-status-bar';
+import { Image } from 'expo-image';
+import { Video, ResizeMode } from 'expo-av';
+import { Feather } from '@expo/vector-icons';
 
-export default function ShowMedia() {
-  const { url } = useLocalSearchParams();
+export default function MediaViewerPage() {
+  const { url, type } = useLocalSearchParams();
+  const router = useRouter();
+  const [aspectRatio, setAspectRatio] = useState(1);
+  const screenWidth = Dimensions.get('window').width;
+  const screenHeight = Dimensions.get('window').height;
+
+  useEffect(() => {
+    if (type === 'image' && typeof url === 'string') {
+        RNImage.getSize(
+        url,
+        (width, height) => {
+          setAspectRatio(width / height);
+        },
+        (error) => {
+          console.error('Error getting image size:', error);
+        }
+      );
+    }
+  }, [url, type]);
+
+  const containerStyle = {
+    width: screenWidth,
+    height: type === 'image' ? screenWidth / aspectRatio : screenHeight,
+  };
 
   return (
-    <View style={styles.container}>
-      <Image source={{ uri: decodeURIComponent(url) }} style={styles.image} resizeMode="contain" />
+    <View className="flex-1 bg-black">
+      <StatusBar style="light" />
+      <Stack.Screen
+        options={{
+          headerShown: false,
+        }}
+      />
+      <TouchableOpacity
+        className="absolute top-12 left-4 z-10"
+        onPress={() => router.back()}
+      >
+        <Feather name="x" size={24} color="white" />
+      </TouchableOpacity>
+      <View className="flex-1 justify-center items-center">
+        {type === 'image' && typeof url === 'string' && (
+          <Image
+            source={{ uri: url }}
+            style={containerStyle}
+            contentFit="contain"
+            transition={200}
+          />
+        )}
+        {type === 'video' && typeof url === 'string' && (
+          <Video
+            source={{ uri: url }}
+            style={containerStyle}
+            resizeMode={ResizeMode.CONTAIN}
+            useNativeControls
+            isLooping
+            shouldPlay
+          />
+        )}
+      </View>
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: 'black',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  image: {
-    width: '100%',
-    height: '100%',
-  },
-});

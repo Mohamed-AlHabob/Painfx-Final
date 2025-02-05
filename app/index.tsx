@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import {
   Alert,
@@ -8,18 +8,17 @@ import {
   TouchableOpacity,
   View,
   Linking,
-  TextInput,
 } from "react-native";
 import { Link, Redirect } from "expo-router";
 
-import continueWithSocialAuth from "@/services/socialAuth";
-import { useGlobalContext } from "@/providers/global-provider";
+import continueWithSocialAuth from "@/core/socialAuth";
 import images from "@/constants/images";
 import icons from "@/constants/icons";
+import { useGlobalStore } from "@/core/store";
 
 
 const Auth = () => {
-  const { refetch, loading, isLogged } = useGlobalContext();
+  const { refetch, loading, isLogged } = useGlobalStore();
   if (!loading && isLogged) return <Redirect href="/(root)/(tabs)/chat" />;
 
   const handleLoginWithGoogle = async () => {

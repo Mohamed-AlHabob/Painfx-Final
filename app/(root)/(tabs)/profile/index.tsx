@@ -8,12 +8,12 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-
-
 import icons from "@/constants/icons";
 import { settings } from "@/constants/data";
-import { useGlobalContext } from "@/providers/global-provider";
-import { removeAuthTokens } from "@/services/auth";
+import { useGlobalStore } from "@/core/store";
+import { removeAuthTokens } from "@/core/auth";
+import { Link } from "expo-router";
+
 
 interface SettingsItemProp {
   icon: ImageSourcePropType;
@@ -46,7 +46,7 @@ const SettingsItem = ({
 );
 
 const Profile = () => {
-  const { user, refetch } = useGlobalContext();
+  const { user, refetch } = useGlobalStore();
 
 
   console.log(user);
@@ -75,8 +75,10 @@ const Profile = () => {
         contentContainerClassName="pb-32 px-7"
       >
         <View className="flex flex-row items-center justify-between mt-5">
-          <Text className="text-xl font-rubik-bold">Profile</Text>
-          <Image source={icons.bell} className="size-5" />
+          <Text className="text-xl font-rubik-bold text-black-300">Profile</Text>
+          <Link href={"/notification"}>
+            <Image source={icons.bell} className="size-6" />
+          </Link>
         </View>
 
         <View className="flex flex-row justify-center mt-5">

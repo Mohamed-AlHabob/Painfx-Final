@@ -1,10 +1,20 @@
-import { useGlobalContext } from "@/providers/global-provider";
-import { Redirect, Slot, Stack } from "expo-router";
+import { useGlobalStore } from "@/core/store";
+import { Redirect, Stack } from "expo-router";
+import { useEffect } from "react";
 import { ActivityIndicator } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function AppLayout() {
-  const { loading, isLogged } = useGlobalContext();
+  const { loading, isLogged } = useGlobalStore();
+  const socketConnect = useGlobalStore(state => state.socketConnect)
+	const socketClose = useGlobalStore(state => state.socketClose)
+
+  useEffect(() => {
+		socketConnect()
+		return () => {
+			socketClose()
+		}
+	}, [])
 
   if (loading) {
     return (
@@ -70,7 +80,8 @@ export default function AppLayout() {
       <Stack.Screen
         name="/(modals)/show-media/[url]"
         options={{
-          presentation: 'fullScreenModal',
+          presentation: 'modal',
+          headerShown: false,
           animation: 'slide_from_bottom',
         }}
       />

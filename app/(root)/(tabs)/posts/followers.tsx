@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback } from "react"
-import { ActivityIndicator, FlatList, View, Text, TouchableOpacity } from "react-native"
+import { ActivityIndicator, FlatList, View, Text } from "react-native"
 import { router, useLocalSearchParams } from "expo-router"
 import { SafeAreaView } from "react-native-safe-area-context"
 import PostItem from "@/components/Cards/PostItem"
@@ -49,7 +49,7 @@ const Posts = () => {
   }, [fetchPosts])
 
   const handlePostPress = useCallback((id: string) => {
-    router.push(`/(root)/(modals)/show-media/${id}`);
+    router.push(`/chat/${id}`)
   }, [])
 
   const renderItem = useCallback(({ item }) => <PostItem item={item} onPress={handlePostPress} />, [handlePostPress])

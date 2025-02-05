@@ -1,19 +1,23 @@
 import React, { useState } from "react"
-import { View, TextInput,Text, Button, StyleSheet, TouchableOpacity, Alert } from "react-native"
-import { Link, Redirect, useRouter } from "expo-router"
-import { ENDPOINTS } from "@/services/config"
-import api from "@/services/api"
-import { setAuthTokens } from "@/services/auth"
-import { useGlobalContext } from "@/providers/global-provider"
+import { Text, Alert, KeyboardAvoidingView, TouchableWithoutFeedback, View, Button, Keyboard } from "react-native"
+import { Redirect, router } from "expo-router"
+import { useGlobalStore } from "@/core/store"
+import api from "@/core/api"
+import { ENDPOINTS } from "@/core/config"
+import { setAuthTokens } from "@/core/auth"
+import Input from "@/components/Input"
+
 
 export default function Login() {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
-const { refetch, loading, isLogged } = useGlobalContext();
+  const [emailError, setemailError] = useState('')
+	const [passwordError, setPasswordError] = useState('')
+  const { refetch, loading, isLogged } = useGlobalStore();
 
 if (!loading && isLogged) return <Redirect href="/(root)/(tabs)/chat" />;
 
-  const handleLoginWithEmail = async () => {
+  const handleLogin = async () => {
     try {
       const response = await api.post(ENDPOINTS.LOGIN, {
         email,
@@ -32,47 +36,50 @@ if (!loading && isLogged) return <Redirect href="/(root)/(tabs)/chat" />;
   };
 
   return (
-    <>
-    <Text className="text-lg font-rubik text-black-200 text-center mt-12">
-      Login with Email and Password
-    </Text>
+			<KeyboardAvoidingView behavior="height" style={{ flex: 1 }}>
+				<TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+					<View 
+						style={{ 
+							flex: 1, 
+							justifyContent: 'center',
+							paddingHorizontal: 20
+						}}
+					>
+						{/* <Title text='RealtimeChat' color='#202020' /> */}
 
-    <TextInput
-      className="border border-gray-300 rounded-full w-full py-2 px-4 mt-5"
-      placeholder="Email"
-      value={email}
-      onChangeText={setEmail}
-      keyboardType="email-address"
-      autoCapitalize="none"
-    />
+						<Input 
+							title='Username'
+							value={email}
+							error={emailError}
+							setValue={setEmail}
+							setError={setemailError}
+						/>
 
-    <TextInput
-      className="border border-gray-300 rounded-full w-full py-2 px-4 mt-5"
-      placeholder="Password"
-      value={password}
-      onChangeText={setPassword}
-      secureTextEntry
-      autoCapitalize="none"
-    />
+						<Input 
+							title='Password' 
+							value={password}
+							error={passwordError}
+							setValue={setPassword}
+							setError={setPasswordError}
+							secureTextEntry={true}
+						/>
 
-    <TouchableOpacity
-      onPress={handleLoginWithEmail}
-      className="bg-primary-300 rounded-full w-full py-4 mt-5"
-    >
-      <Text className="text-lg font-rubik-medium text-white text-center">
-        Login
-      </Text>
-    </TouchableOpacity>
+						<Button 
+							title='Sign In' 
+							onPress={handleLogin} 
+						/>
 
-    <TouchableOpacity
-      className="mt-5"
-    >
-      <Link href="/signup">
-      <Text className="text-lg font-rubik text-primary-300 text-center">
-        Don't have an account? Register
-      </Text>
-      </Link>
-    </TouchableOpacity>
-  </>
+						<Text style={{ textAlign: 'center', marginTop: 40 }}>
+							Don't have an account? <Text 
+								style={{ color: 'blue' }}
+								onPress={() => router.push('/(auth)/signup')}
+							>
+								Sign Up
+							</Text>
+						</Text>
+
+					</View>
+				</TouchableWithoutFeedback>
+			</KeyboardAvoidingView>
   )
 }

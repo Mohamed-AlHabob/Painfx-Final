@@ -3,6 +3,7 @@ export const API_URL = 'https://painfx.onrender.com/api';
 export const ENDPOINTS = {
   LOGIN: "/jwt/create/",
   LOGOUT: "/logout/",
+  WS_URL : 'painfx.onrender.com',
   TOKEN_REFRESH: "/jwt/refresh/",
   REGISTER: "/users/",
   GOOGLE_LOGIN: "/o/google/",

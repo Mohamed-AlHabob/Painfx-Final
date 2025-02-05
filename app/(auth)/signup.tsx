@@ -1,8 +1,9 @@
 import React, { useState } from "react"
 import {TextInput,Text, TouchableOpacity, Alert } from "react-native"
 import { Link } from "expo-router"
-import api from "@/services/api"
-import { ENDPOINTS } from "@/services/config"
+import api from "@/core/api"
+import { ENDPOINTS } from "@/core/config"
+
 
 export default function Signup() {
   const [email, setEmail] = useState("")
