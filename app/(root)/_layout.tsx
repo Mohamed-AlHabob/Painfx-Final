@@ -80,8 +80,7 @@ export default function AppLayout() {
       <Stack.Screen
         name="/(modals)/show-media/[url]"
         options={{
-          presentation: 'modal',
-          headerShown: false,
+          presentation: 'fullScreenModal',
           animation: 'slide_from_bottom',
         }}
       />
