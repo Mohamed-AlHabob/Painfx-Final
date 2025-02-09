@@ -16,7 +16,6 @@ const Layout = () => {
   return (
     <MaterialTopTabs>
       <MaterialTopTabs.Screen name="index" options={{ title: "For You" }} />
-      <MaterialTopTabs.Screen name="followers" options={{ title: "Followers" }} />
     </MaterialTopTabs>
   );
 };

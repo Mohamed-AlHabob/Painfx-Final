@@ -1,71 +1,74 @@
-import React from "react"
-import { View, Text, FlatList, StyleSheet, TouchableOpacity } from "react-native"
-import { useRouter } from "expo-router"
+import { useEffect, useState, useCallback } from "react"
+import { ActivityIndicator, FlatList, View, Text } from "react-native"
+import { router } from "expo-router"
+import { SafeAreaView } from "react-native-safe-area-context"
+import api from "@/core/api"
+import { ENDPOINTS } from "@/core/config"
+import ReservationCard from "@/components/reservation/ReservationCard"
+import NoResults from "@/components/NoResults"
 
-const reservations = [
-  { id: "1", doctor: "Dr. Smith", date: "2023-06-15 10:00 AM" },
-  { id: "2", doctor: "Dr. Johnson", date: "2023-06-20 2:30 PM" },
-  { id: "3", doctor: "Dr. Williams", date: "2023-06-25 11:15 AM" },
-]
+const Reservations = () => {
+  const [reservations, setReservations] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [refreshing, setRefreshing] = useState(false)
 
+  const fetchReservations = useCallback(async () => {
+    try {
+      setLoading(true)
+      const response = await api.get(ENDPOINTS.RESERVATIONS)
 
-export default function Reservations() {
-  const router = useRouter()
-  
-  const handleNewReservation = () => {
-    router.push("/(main)/(modals)/NewReservation")
-  }
-  const handleReservationPress = (id: string) => {
-    router.push(`/reservation-details/${id}`)
-  }
+      if (response.data && response.data.results) {
+        setReservations(response.data.results)
+      } else {
+        setReservations([])
+      }
+    } catch (error) {
+      console.error("Error fetching posts:", error)
+    } finally {
+      setLoading(false)
+    }
+  }, [])
+
+  useEffect(() => {
+    fetchReservations()
+  }, [fetchReservations])
+
+  const handleRefresh = useCallback(async () => {
+    setRefreshing(true)
+    await fetchReservations()
+    setRefreshing(false)
+  }, [fetchReservations])
+
+  const handleRservationPress = useCallback((id: string) => {
+    router.push(`/reservations/${id}`);
+  }, [])
+
+  const renderItem = useCallback(({ item }) => <ReservationCard reservation={item}  />, [handleRservationPress])
+
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView className="flex-1">
       <FlatList
         data={reservations}
+        renderItem={renderItem}
         keyExtractor={(item) => item.id}
-        renderItem={({ item }) => (
-          <TouchableOpacity style={styles.reservationItem} onPress={() => handleReservationPress(item.id)}>
-            <Text style={styles.doctorName}>{item.doctor}</Text>
-            <Text style={styles.date}>{item.date}</Text>
-          </TouchableOpacity>
-        )}
+        contentContainerClassName="pb-20"
+        showsVerticalScrollIndicator={false}
+        ListEmptyComponent={
+          loading ? (
+            <ActivityIndicator size="large" className="text-primary-300 mt-5" />
+          ) : (
+            <View className="flex-1 items-center justify-center p-4">
+               <NoResults />
+            </View>
+          )
+        }
+        onRefresh={handleRefresh}
+        refreshing={refreshing}
       />
-      <TouchableOpacity style={styles.newPostButton} onPress={handleNewReservation}>
-        <Text style={styles.newPostButtonText}>New Reservation</Text>
-      </TouchableOpacity>
-    </View>
+    </SafeAreaView>
   )
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  reservationItem: {
-    padding: 20,
-    borderBottomWidth: 1,
-    borderBottomColor: "#ccc",
-  },
-  doctorName: {
-    fontSize: 18,
-    fontWeight: "bold",
-  },
-  date: {
-    fontSize: 14,
-    color: "gray",
-  },
-  newPostButton: {
-    position: "absolute",
-    right: 20,
-    bottom: 20,
-    backgroundColor: "#007AFF",
-    padding: 15,
-    borderRadius: 30,
-  },
-  newPostButtonText: {
-    color: "white",
-    fontWeight: "bold",
-  },
-})
+export default Reservations
 

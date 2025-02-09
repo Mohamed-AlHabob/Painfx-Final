@@ -83,12 +83,13 @@ const Profile = () => {
 
         <View className="flex flex-row justify-center mt-5">
           <View className="flex flex-col items-center relative mt-5">
-            <Image
-              source={{
-                uri: "https://as2.ftcdn.net/v2/jpg/07/23/14/93/1000_F_723149335_tA0Fo8zefrHzYlSgXRMYHmBQk7CuWrRd.jpg",
-              }}
-              className="size-44 relative rounded-full"
-            />
+          {user?.profile.avatar ? (
+            <Image source={{ uri: user?.profile.avatar }} className="size-44 relative rounded-full" resizeMode="cover" />
+          ) : (
+            <View className="size-44 relative rounded-full bg-primary-100 items-center justify-center">
+              <Text className="text-primary-600 text-3xl font-semibold">{user?.first_name.charAt(0) || "N"}</Text>
+            </View>
+           )}
             <TouchableOpacity className="absolute bottom-11 right-2">
               <Image source={icons.edit} className="size-9" />
             </TouchableOpacity>
@@ -98,7 +99,6 @@ const Profile = () => {
             </Text>
           </View>
         </View>
-
         <View className="flex flex-col mt-10">
           <SettingsItem icon={icons.calendar} title="My Bookings" />
           <SettingsItem icon={icons.wallet} title="Payments" />

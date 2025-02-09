@@ -1,16 +1,14 @@
 import { useEffect, useState, useCallback } from "react"
-import { ActivityIndicator, FlatList, View, Text, TouchableOpacity } from "react-native"
-import { router, useLocalSearchParams } from "expo-router"
+import { ActivityIndicator, FlatList, View,Text, Image, Pressable } from "react-native"
+import { router } from "expo-router"
 import { SafeAreaView } from "react-native-safe-area-context"
-import PostItem from "@/components/Cards/PostItem"
-import { useGlobalStore } from "@/core/store"
 import api from "@/core/api"
 import { ENDPOINTS } from "@/core/config"
+import PostCard from "@/components/post/PostItem"
+import NoResults from "@/components/NoResults"
+import icons from "@/constants/icons"
 
 const Posts = () => {
-  const { user } = useGlobalStore()
-  const params = useLocalSearchParams<{ query?: string }>()
-
   const [posts, setPosts] = useState([])
   const [loading, setLoading] = useState(true)
   const [refreshing, setRefreshing] = useState(false)
@@ -19,12 +17,7 @@ const Posts = () => {
   const fetchPosts = useCallback(async () => {
     try {
       setLoading(true)
-      const response = await api.get(ENDPOINTS.POSTS, {
-        params: {
-          query: params.query,
-          tab: activeTab,
-        },
-      })
+      const response = await api.get(ENDPOINTS.POSTS)
 
       if (response.data && response.data.results) {
         setPosts(response.data.results)
@@ -36,7 +29,7 @@ const Posts = () => {
     } finally {
       setLoading(false)
     }
-  }, [params.query, activeTab])
+  }, [])
 
   useEffect(() => {
     fetchPosts()
@@ -52,7 +45,11 @@ const Posts = () => {
     router.push(`/(root)/(modals)/show-media/${id}`);
   }, [])
 
-  const renderItem = useCallback(({ item }) => <PostItem item={item} onPress={handlePostPress} />, [handlePostPress])
+  const handleNewPostPress = useCallback((id: string) => {
+    router.push(`/(root)/(modals)/NewPost`);
+  }, [])
+
+  const renderItem = useCallback(({ item }) => <PostCard item={item} onPress={handlePostPress} />, [handlePostPress])
 
 
   return (
@@ -68,13 +65,17 @@ const Posts = () => {
             <ActivityIndicator size="large" className="text-primary-300 mt-5" />
           ) : (
             <View className="flex-1 items-center justify-center p-4">
-              <Text className="text-gray-500 text-center">No posts found</Text>
+               <NoResults />
             </View>
           )
         }
         onRefresh={handleRefresh}
         refreshing={refreshing}
       />
+        <Pressable onPress={handleNewPostPress => ({})}>
+        <Image source={icons.info} className="size-5" />
+        <Text>New Post</Text>
+        </Pressable>
     </SafeAreaView>
   )
 }

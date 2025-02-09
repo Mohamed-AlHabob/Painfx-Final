@@ -40,6 +40,13 @@ export default function AppLayout() {
         }}
       />
       <Stack.Screen
+        name="post"
+        options={{
+          animation: 'slide_from_right',
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
         name="reservation-details"
         options={{
           animation: 'slide_from_right',
