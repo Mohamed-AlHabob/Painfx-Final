@@ -1,13 +1,17 @@
 import React, { useState } from "react"
 import {TextInput,Text, TouchableOpacity, Alert } from "react-native"
-import { Link } from "expo-router"
+import { Link, Redirect } from "expo-router"
 import api from "@/core/api"
 import { ENDPOINTS } from "@/core/config"
+import { useGlobalStore } from "@/core/store"
 
 
 export default function Signup() {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
+  const { loading, isLogged } = useGlobalStore();
+
+  if (!loading && isLogged) return <Redirect href="/(root)/(tabs)/chat" />;
 
   const handleRegister = async () => {
     try {

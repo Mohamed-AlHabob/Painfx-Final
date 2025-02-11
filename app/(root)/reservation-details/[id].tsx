@@ -6,6 +6,7 @@ import icons from "@/constants/icons";
 import images from "@/constants/images";
 import { ENDPOINTS } from "@/core/config";
 import api from "@/core/api";
+import { Avatar } from "@/components/ui/avatar";
 
 interface ReservationDetails {
   id: string;
@@ -125,7 +126,7 @@ const ReservationDetails = () => {
       <View className="flex flex-row items-center gap-3">
         <View className="flex flex-row items-center px-4 py-2 bg-primary-100 rounded-full">
           <Text className="text-xs font-rubik-bold text-primary-300">
-            {reservation.doctor?.specialization.name || "General Appointment"}
+            {reservation.doctor?.specialization?.name || "General"}
           </Text>
         </View>
 
@@ -151,8 +152,13 @@ const ReservationDetails = () => {
 
         <View className="flex flex-row items-center justify-between mt-4">
           <View className="flex flex-row items-center">
-            {/* <Image source={{ uri: reservation.patient.user.profile.avatar }} className="size-14 rounded-full" /> */}
 
+            <Avatar
+              src={reservation.patient.user.profile.avatar}
+              fallback={reservation.patient.user.first_name.charAt(0) || "N"}
+              size="lg"
+              className="mr-3"
+            />
             <View className="flex flex-col items-start justify-center ml-3">
               <Text className="text-lg text-black-300 text-start font-rubik-bold">
                 {`${reservation.patient.user.first_name} ${reservation.patient.user.last_name}`}

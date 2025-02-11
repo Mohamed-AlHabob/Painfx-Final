@@ -16,14 +16,10 @@ import Filters from "@/components/Filters";
 import NoResults from "@/components/NoResults";
 import { Card, FeaturedCard } from "@/components/Cards";
 import { useGlobalStore } from "@/core/store";
+import { Avatar } from "@/components/ui/avatar";
 
 const Home = () => {
   const { user } = useGlobalStore();
-
-  const params = useLocalSearchParams<{ query?: string; filter?: string }>();
-
-
-
 
   const handleCardPress = (id: string) => router.push(`/chat/${id}`);
 
@@ -57,13 +53,11 @@ const Home = () => {
           <View className="px-5">
             <View className="flex flex-row items-center justify-between mt-5">
               <View className="flex flex-row">
-                <Image
-                  source={{
-                    uri: "https://as2.ftcdn.net/v2/jpg/07/23/14/93/1000_F_723149335_tA0Fo8zefrHzYlSgXRMYHmBQk7CuWrRd.jpg",
-                  }}
-                  className="size-12 rounded-full"
-                />
-
+              <Avatar
+                   src={user?.profile.avatar}
+                   fallback={user?.first_name.charAt(0) || "N"}
+                   size="lg"
+                 />
                 <View className="flex flex-col items-start ml-2 justify-center">
                   <Text className="text-xs font-rubik text-black-100">
                     Good Morning

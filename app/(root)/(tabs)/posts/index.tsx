@@ -1,7 +1,6 @@
 import { useEffect, useState, useCallback } from "react"
 import { ActivityIndicator, FlatList, View,Text, Image, Pressable } from "react-native"
 import { router } from "expo-router"
-import { SafeAreaView } from "react-native-safe-area-context"
 import api from "@/core/api"
 import { ENDPOINTS } from "@/core/config"
 import PostCard from "@/components/post/PostItem"
@@ -12,7 +11,6 @@ const Posts = () => {
   const [posts, setPosts] = useState([])
   const [loading, setLoading] = useState(true)
   const [refreshing, setRefreshing] = useState(false)
-  const [activeTab, setActiveTab] = useState("for-you")
 
   const fetchPosts = useCallback(async () => {
     try {
@@ -45,38 +43,28 @@ const Posts = () => {
     router.push(`/(root)/(modals)/show-media/${id}`);
   }, [])
 
-  const handleNewPostPress = useCallback((id: string) => {
-    router.push(`/(root)/(modals)/NewPost`);
-  }, [])
-
   const renderItem = useCallback(({ item }) => <PostCard item={item} onPress={handlePostPress} />, [handlePostPress])
 
 
   return (
-    <SafeAreaView className="flex-1">
-      <FlatList
-        data={posts}
-        renderItem={renderItem}
-        keyExtractor={(item) => item.id}
-        contentContainerClassName="pb-20"
-        showsVerticalScrollIndicator={false}
-        ListEmptyComponent={
-          loading ? (
-            <ActivityIndicator size="large" className="text-primary-300 mt-5" />
-          ) : (
-            <View className="flex-1 items-center justify-center p-4">
-               <NoResults />
-            </View>
-          )
-        }
-        onRefresh={handleRefresh}
-        refreshing={refreshing}
-      />
-        <Pressable onPress={handleNewPostPress => ({})}>
+      <><FlatList
+      data={posts}
+      renderItem={renderItem}
+      keyExtractor={(item) => item.id}
+      contentContainerClassName="pb-20"
+      showsVerticalScrollIndicator={false}
+      ListEmptyComponent={loading ? (
+        <ActivityIndicator size="large" className="text-primary-300 mt-5" />
+      ) : (
+        <View className="flex-1 items-center justify-center p-4">
+          <NoResults />
+        </View>
+      )}
+      onRefresh={handleRefresh}
+      refreshing={refreshing} /><Pressable onPress={handleNewPostPress => ({})}>
         <Image source={icons.info} className="size-5" />
         <Text>New Post</Text>
-        </Pressable>
-    </SafeAreaView>
+      </Pressable></>
   )
 }
 

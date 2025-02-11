@@ -1,6 +1,7 @@
 import { View, Text, Pressable, Image } from "react-native"
 import { formatDistanceToNow } from "date-fns"
 import icons from "@/constants/icons"
+import { Avatar } from "./ui/avatar"
 
 interface NotificationCardProps {
   item: {
@@ -27,13 +28,11 @@ const NotificationCard = ({ item }: NotificationCardProps) => {
     >
       <View className="flex-row items-center p-4">
         <View className="h-10 w-10 rounded-full overflow-hidden bg-gray-100">
-          {item.user.profile.avatar ? (
-            <Image source={{ uri: item.user.profile.avatar }} className="h-full w-full" resizeMode="cover" />
-          ) : (
-            <View className="h-full w-full bg-primary-100 items-center justify-center">
-              <Text className="text-primary-600 text-lg font-semibold">{item.user.first_name.charAt(0) || "N"}</Text>
-            </View>
-           )}
+        <Avatar
+        src={item.user.profile.avatar}
+        fallback={item.user.first_name.charAt(0) || ""}
+        size="lg"
+        />
         </View>
         <View className="ml-3 flex-1">
           <View className="flex-row items-center flex-wrap">
@@ -53,7 +52,7 @@ const NotificationCard = ({ item }: NotificationCardProps) => {
       <View className="px-4 py-3 flex-row items-center justify-between border-t border-gray-100">
         <Pressable className="flex-row items-center">
           <Image source={icons.chat} className="size-5" />
-          <Text className="ml-2 text-gray-600 text-sm">Reply</Text>
+          <Text className="ml-2 text-gray-600 text-sm">Mark as Read</Text>
         </Pressable>
         <Pressable>
           <Image source={icons.info} className="size-5" />

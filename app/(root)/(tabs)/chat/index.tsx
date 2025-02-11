@@ -1,9 +1,9 @@
 import type React from "react"
 import { ActivityIndicator, FlatList, View } from "react-native"
-import { SafeAreaView } from "react-native-safe-area-context"
 import { useGlobalStore } from "@/core/store"
 import NoResults from "@/components/NoResults"
-import ChatCard from "@/components/chat/ChatCard"
+import { ChatCard } from "@/components/chat/ChatCard"
+
 
 const ChatsScreen: React.FC = () => {
   const friendList = useGlobalStore((state) => state.friendList)
@@ -29,9 +29,7 @@ const ChatsScreen: React.FC = () => {
   }
 
   return (
-    <SafeAreaView className="h-full bg-white">
       <View className="p-2">{renderContent()}</View>
-    </SafeAreaView>
   )
 }
 

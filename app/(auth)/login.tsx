@@ -12,10 +12,10 @@ export default function Login() {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [emailError, setemailError] = useState('')
-	const [passwordError, setPasswordError] = useState('')
+  const [passwordError, setPasswordError] = useState('')
   const { refetch, loading, isLogged } = useGlobalStore();
 
-if (!loading && isLogged) return <Redirect href="/(root)/(tabs)/chat" />;
+  if (!loading && isLogged) return <Redirect href="/(root)/(tabs)/chat" />;
 
   const handleLogin = async () => {
     try {

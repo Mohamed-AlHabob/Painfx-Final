@@ -1,61 +1,71 @@
-import { ActivityIndicator, FlatList, Text, TouchableOpacity, View } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { useGlobalStore } from "@/core/store";
-import NoResults from "@/components/NoResults";
-import { Cell, Thumbnail } from "@/components/Thumbnail";
+import { useEffect, useState, useCallback } from "react"
+import { ActivityIndicator, FlatList, View } from "react-native"
+import { router } from "expo-router"
+import api from "@/core/api"
+import { ENDPOINTS } from "@/core/config"
+import NoResults from "@/components/NoResults"
+import NotificationCard from "@/components/NotificationCard"
+
+const Notifications = () => {
+  const [notifications, setNotifications] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [refreshing, setRefreshing] = useState(false)
+
+  const fetchNotifications = useCallback(async () => {
+    try {
+      setLoading(true)
+      const response = await api.get(ENDPOINTS.NOTIFICATIONS)
+
+      if (response.data && response.data) {
+        setNotifications(response.data)
+      } else {
+        setNotifications([])
+      }
+    } catch (error) {
+      console.error("Error fetching posts:", error)
+    } finally {
+      setLoading(false)
+    }
+  }, [])
+
+  useEffect(() => {
+    fetchNotifications()
+  }, [fetchNotifications])
+
+  const handleRefresh = useCallback(async () => {
+    setRefreshing(true)
+    await fetchNotifications()
+    setRefreshing(false)
+  }, [fetchNotifications])
+
+  const handleNotificationPress = useCallback((id: string) => {
+    router.push(`/(root)/(modals)/show-media/${id}`);
+  }, [])
 
 
-const RequestAccept = ({ item }) => {
-  const { requestAccept } = useGlobalStore();
+  const renderItem = useCallback(({ item }) => <NotificationCard item={item} />, [handleNotificationPress])
+
 
   return (
-    <TouchableOpacity
-      className="bg-gray-800 px-4 h-9 rounded-full flex items-center justify-center"
-      onPress={() => requestAccept(item.sender.username)}
-    >
-      <Text className="text-white font-bold">Accept</Text>
-    </TouchableOpacity>
-  );
-};
-
-const RequestRow = ({ item }) => {
-  return (
-    <Cell>
-      <Thumbnail url={item.sender.thumbnail} size={76} />
-      <View className="flex-1 px-4">
-        <Text className="font-bold text-gray-900 mb-1">{item.sender.first_name} {item.sender.last_name}</Text>
-        <Text className="text-gray-600">
-          Requested to connect with you
-          <Text className="text-gray-400 text-xs"> {item.created_at}</Text>
-        </Text>
-      </View>
-      <RequestAccept item={item} />
-    </Cell>
-  );
-};
-
-const NotificationPage = () => {
-  const { requestList, loading } = useGlobalStore();
-
-  if (loading) {
-    return <ActivityIndicator className="flex-1 mt-5 text-primary-300" size="large" />;
-  }
-
-  if (!requestList || requestList.length === 0) {
-    return <NoResults />;
-  }
-
-  return (
-    <SafeAreaView className="h-full bg-white">
       <FlatList
-        data={requestList}
-        renderItem={({ item }) => <RequestRow item={item} />}
-        keyExtractor={(item) => item.sender.username}
+        data={notifications}
+        renderItem={renderItem}
+        keyExtractor={(item) => item.id}
         showsVerticalScrollIndicator={false}
-        contentContainerClassName="pb-32"
+        ListEmptyComponent={
+          loading ? (
+            <ActivityIndicator size="large" className="text-primary-300 mt-5" />
+          ) : (
+            <View className="flex-1 items-center justify-center p-4">
+               <NoResults />
+            </View>
+          )
+        }
+        onRefresh={handleRefresh}
+        refreshing={refreshing}
       />
-    </SafeAreaView>
-  );
-};
+  )
+}
 
-export default NotificationPage;
+export default Notifications
+

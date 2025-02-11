@@ -1,5 +1,4 @@
 import { Platform } from "react-native";
-import ProfileImage from "../assets/images/avatar.png";
 import { API_URL } from "./config";
 
 
@@ -14,7 +13,7 @@ export function log(...args: any[]) {
 
 export function thumbnail(url: string | null) {
   if (!url) {
-    return ProfileImage;
+   
   }
   return { uri: `http://${API_URL}${url}` };
 }

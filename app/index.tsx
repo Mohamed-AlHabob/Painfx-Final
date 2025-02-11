@@ -16,7 +16,8 @@ import icons from "@/constants/icons";
 import { useGlobalStore } from "@/core/store";
 
 const Auth = () => {
-  const { refetch, loading, isLogged } = useGlobalStore();
+  const { loading, isLogged } = useGlobalStore();
+
   if (!loading && isLogged) return <Redirect href="/(root)/(tabs)/chat" />;
 
   const handleLoginWithGoogle = async () => {

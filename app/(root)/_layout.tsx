@@ -7,8 +7,11 @@ import { SafeAreaView } from "react-native-safe-area-context";
 export default function AppLayout() {
   const { loading, isLogged } = useGlobalStore();
   const socketConnect = useGlobalStore(state => state.socketConnect)
-	const socketClose = useGlobalStore(state => state.socketClose)
+	const socketClose = useGlobalStore((state: { socketClose: any; }) => state.socketClose)
 
+
+  if (!loading && !isLogged) return <Redirect href="/(auth)/signup" />;
+  
   useEffect(() => {
 		socketConnect()
 		return () => {
@@ -22,10 +25,6 @@ export default function AppLayout() {
         <ActivityIndicator className="text-primary-300" size="large" />
       </SafeAreaView>
     );
-  }
-
-  if (!isLogged) {
-    return <Redirect href="/(auth)/signup" />;
   }
 
   return (

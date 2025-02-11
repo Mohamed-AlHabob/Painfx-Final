@@ -3,6 +3,7 @@ import icons from "@/constants/icons";
 import { formatDistanceToNow } from "date-fns"
 import { Link, router } from "expo-router"
 import MediaGrid from "./MediaAttachment"
+import { Avatar } from "../ui/avatar";
 
 interface PostCardProps {
   item: {
@@ -37,42 +38,30 @@ interface PostCardProps {
   onPress?: (id: string) => void
 }
 
-const PostCard = ({ item, onPress }: PostCardProps) => {
+const PostCard = ({ item }: PostCardProps) => {
 
   const handleProfilePress = () => {
     router.push(`/(root)/(tabs)/profile/${item.doctor.id}`)
   }
 
-
   return (
     <View className="bg-white rounded-2xl shadow-sm mt-4 mx-4 overflow-hidden">
-      {/* Header */}
       <Pressable 
         onPress={handleProfilePress}
         className="flex-row items-center p-4"
       >
-        <View className="h-10 w-10 rounded-full overflow-hidden bg-gray-100">
-          {item.doctor.user.profile.avatar ? (
-            <Image
-              source={{ uri: item.doctor.user.profile.avatar  }}
-              className="h-full w-full"
-              // contentFit="cover"
-            />
-          ) : (
-            <View className="h-full w-full bg-primary-100 items-center justify-center">
-              <Text className="text-primary-600 text-lg font-semibold">
-                {item.doctor.user.first_name.charAt(0)}
-              </Text>
-            </View>
-          )}
-        </View>
+        <Avatar
+        src={item.doctor.user.profile.avatar}
+        fallback={item.doctor.user.first_name.charAt(0) || "N"}
+        size="md"
+        />
         <View className="ml-3 flex-1">
         <View className="flex-row items-center flex-wrap">
             <Text className="font-semibold text-gray-900">
-            {item.doctor.user.first_name} {item.doctor.user.last_name}
+            {item.doctor.user.first_name || ""} {item.doctor.user.last_name || ""}
             </Text>
             <Text className="text-gray-500 text-sm ml-2">
-              • {item.doctor.specialization.name}
+              • {item.doctor.specialization?.name || "General"}
             </Text>
           </View>
           <Text className="text-gray-500 text-xs">
@@ -81,7 +70,6 @@ const PostCard = ({ item, onPress }: PostCardProps) => {
         </View>
       </Pressable>
 
-      {/* Content */}
       <Link href={`/(root)/post/${item.id}`}>
       <View className="px-4 pb-3">
         {item.title && (
@@ -107,12 +95,16 @@ const PostCard = ({ item, onPress }: PostCardProps) => {
 <View className="px-4 py-3 flex-row items-center justify-between border-t border-gray-100 mt-3">
         <View className="flex-row items-center space-x-6 gap-4">
           <Pressable className="flex-row items-center">
-          <Image source={icons.chat} className="size-5" />
+          <Image source={icons.people} className="size-5" />
               <Text className="ml-2 text-gray-600 text-sm">{item.likes_count || 0}</Text>
           </Pressable>
           <Pressable className="flex-row items-center">
-          <Image source={icons.chat} className="size-5" />
+          <Image source={icons.send} className="size-5" />
               <Text className="ml-2 text-gray-600 text-sm">{item.view_count || 0}</Text>
+          </Pressable>
+          <Pressable className="flex-row items-center">
+          <Image source={icons.chat} className="size-5" />
+              <Text className="ml-2 text-gray-600 text-sm">{item.comments_count || 0}</Text>
           </Pressable>
         </View>
         <Pressable>
