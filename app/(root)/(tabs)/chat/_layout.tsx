@@ -21,8 +21,6 @@ const Layout = () => {
     <MaterialTopTabs>
       <MaterialTopTabs.Screen name="index" options={{ title: "All" }} />
       <MaterialTopTabs.Screen name="recent" options={{ title: "Recent" }} />
-      <MaterialTopTabs.Screen name="foryou" options={{ title: "For You" }} />
-      <MaterialTopTabs.Screen name="nearby" options={{ title: "Nearby" }} />
     </MaterialTopTabs>
   );
 };

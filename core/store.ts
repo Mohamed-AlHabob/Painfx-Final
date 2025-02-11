@@ -3,18 +3,7 @@ import { persist } from "zustand/middleware"
 import { getAuthTokens, removeAuthTokens } from "./auth"
 import api from "./api"
 import { ENDPOINTS } from "./config"
-
-interface User {
-  id: string
-  username: string
-  first_name: string
-  last_name?: string
-  email: string
-  role: string
-  profile: {
-    avatar: string
-  }
-}
+import { User } from "./types"
 
 interface GlobalStore {
   user: User | null

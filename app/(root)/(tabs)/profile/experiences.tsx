@@ -4,7 +4,7 @@ import { View, Text, StyleSheet, Button } from 'react-native';
 export default function page() {
   return (
     <View style={styles.container}>
-      <Text style={styles.name}>Closet</Text>
+      <Text style={styles.name}>Experiences</Text>
     </View>
   );
 }

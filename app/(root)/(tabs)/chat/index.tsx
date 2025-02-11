@@ -21,7 +21,7 @@ const ChatsScreen: React.FC = () => {
     return (
       <FlatList
         data={friendList}
-        renderItem={({ item }) => <ChatCard id={item.id} item={item} />}
+        renderItem={({ item }) => <ChatCard item={item} />}
         keyExtractor={(item) => item.id}
         contentContainerStyle={{ paddingBottom: 32 }}
       />

@@ -13,7 +13,11 @@ MaterialTopTabNavigationEventMap
 
 const Layout = () => {
   return (
-<MaterialTopTabs></MaterialTopTabs>
+<MaterialTopTabs>
+<MaterialTopTabs.Screen name="index" options={{ title: "All" }} />
+<MaterialTopTabs.Screen name="experiences" options={{ title: "Experiences" }} />
+<MaterialTopTabs.Screen name="reviews" options={{ title: "Reviews" }} />
+</MaterialTopTabs>
   );
 };
 

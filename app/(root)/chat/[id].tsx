@@ -15,17 +15,8 @@ import { formatDistanceToNow } from "date-fns"
 import { Ionicons } from "@expo/vector-icons"
 import { useGlobalStore } from "@/core/store"
 import { Avatar } from "@/components/ui/avatar"
+import { Message } from "@/core/types"
 
-interface Message {
-  id: string
-  text: string
-  user: {
-    id: string
-    first_name: string
-    last_name: string
-  }
-  created_at: string
-}
 
 const ChatPage: React.FC = () => {
   const { id } = useLocalSearchParams<{ id: string }>()

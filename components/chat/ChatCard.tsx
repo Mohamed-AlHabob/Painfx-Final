@@ -2,12 +2,12 @@ import React from "react"
 import { View, Text, Pressable, Image } from "react-native"
 import { formatDistanceToNow } from "date-fns"
 import { router } from "expo-router"
-import { FriendSerializer } from "@/types/api"
 import { Avatar } from "@/components/ui/avatar"
 import { Ionicons } from "@expo/vector-icons"
+import { Friend } from "@/core/types"
 
 interface ChatCardProps {
-  item: FriendSerializer
+  item: Friend
 }
 
 export const ChatCard: React.FC<ChatCardProps> = ({ item }) => {

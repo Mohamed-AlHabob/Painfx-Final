@@ -4,7 +4,7 @@ import { View, Text, StyleSheet, Button } from 'react-native';
 export default function page() {
   return (
     <View style={styles.container}>
-      <Text style={styles.name}>Nearby</Text>
+      <Text style={styles.name}>Reviews</Text>
     </View>
   );
 }

@@ -1,5 +1,4 @@
-export interface UserProfileSerializer {
-    id: number
+export interface UserProfile {
     phone_number: string
     address: string
     gender: string
@@ -8,8 +7,8 @@ export interface UserProfileSerializer {
     latitude: number
   }
   
-  export interface UserSerializer {
-    id: number
+  export interface User {
+    id: string
     email: string
     role: string
     first_name: string
@@ -17,33 +16,33 @@ export interface UserProfileSerializer {
     username: string
     is_active: boolean
     last_login: string
-    profile: UserProfileSerializer
+    profile: UserProfile
   }
   
-  export interface SearchSerializer extends UserSerializer {
+  export interface Search extends User {
     status: "pending-them" | "pending-me" | "connected" | "no-connection"
   }
   
-  export interface RequestSerializer {
-    id: number
-    sender: UserSerializer
-    receiver: UserSerializer
+  export interface Request {
+    id: string
+    sender: User
+    receiver: User
     created_at: string
   }
   
-  export interface FriendSerializer {
-    id: number
-    friend: UserSerializer
+  export interface Friend {
+    id: string
+    friend: User
     preview: string
     updated_at: string
   }
   
-  export interface MessageSerializer {
-    id: number
+  export interface Message {
+    id: string
     is_me: boolean
     text: string
     unread: boolean
-    user: UserSerializer
+    user: User
     created_at: string
   }
   

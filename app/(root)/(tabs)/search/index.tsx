@@ -17,18 +17,9 @@ import Filters from "@/components/Filters";
 import NoResults from "@/components/NoResults";
 
 const Explore = () => {
-  const params = useLocalSearchParams<{ query?: string; filter?: string }>();
   const [properties, setProperties] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
-  useEffect(() => {
-    // Fetch properties data here and update the state
-    // Example:
-    // fetchProperties().then(data => {
-    //   setProperties(data);
-    //   setLoading(false);
-    // });
-  }, []);
 
   const handleCardPress = (id: string) => router.push(`/reservation-details/${id}`);
 
@@ -53,7 +44,7 @@ const Explore = () => {
         }
         ListHeaderComponent={() => (
           <View className="px-5">
-            {/* <View className="flex flex-row items-center justify-between mt-5">
+            <View className="flex flex-row items-center justify-between mt-5">
               <TouchableOpacity
                 onPress={() => router.back()}
                 className="flex flex-row bg-primary-200 rounded-full size-11 items-center justify-center"
@@ -65,7 +56,7 @@ const Explore = () => {
                 Search for Your Ideal Home
               </Text>
               <Image source={icons.bell} className="w-6 h-6" />
-            </View> */}
+            </View>
 
             <Search />
 

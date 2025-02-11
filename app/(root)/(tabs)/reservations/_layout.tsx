@@ -19,7 +19,11 @@ const Layout = () => {
         tabBarLabelStyle: { fontSize: 14, fontWeight: "bold" },
         tabBarIndicatorStyle: { backgroundColor: "#6200ee", height: 2 },
       }}
-    ></MaterialTopTabs>
+    >
+      <MaterialTopTabs.Screen name="index" options={{ title: "Recents" }} />
+      <MaterialTopTabs.Screen name="complete" options={{ title: "Complete" }} />
+      <MaterialTopTabs.Screen name="canceled" options={{ title: "Canceled" }} />
+    </MaterialTopTabs>
   );
 };
 
