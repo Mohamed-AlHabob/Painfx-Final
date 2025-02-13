@@ -5,18 +5,19 @@ import { router } from "expo-router"
 import { Avatar } from "@/components/ui/avatar"
 import { Ionicons } from "@expo/vector-icons"
 import { Friend } from "@/core/types"
+import { Skeleton } from "../global/skeleton"
 
 interface ChatCardProps {
   item: Friend
 }
 
-export const ChatCard: React.FC<ChatCardProps> = ({ item }) => {
-  const { id, friend, preview, updated_at } = item
+export const ChatCard = ({ item }: ChatCardProps) => {
+  const { id, friend, preview, updated_at,unread=false } = item
   const { first_name, last_name, profile } = friend
 
   return (
     <Pressable
-      className="flex-row bg-white rounded-2xl shadow-sm  items-center px-4 py-3 mt-2 overflow-hidden"
+      className={`flex-row bg-white rounded-2xl shadow-sm  items-center px-4 py-3 mt-4 mx-4 ${unread ? " opacity-20 " : " text-red-600"} overflow-hidden`}
       onPress={() => router.push(`/(root)/chat/${id}`)}
     >
       <Avatar
@@ -44,3 +45,27 @@ export const ChatCard: React.FC<ChatCardProps> = ({ item }) => {
     </Pressable>
   )
 }
+
+ChatCard.Skeleton = function ChatSkeleton() {
+  return (
+    <View className="flex-row bg-white rounded-2xl shadow-sm items-center px-4 py-3 mt-4 mx-4 overflow-hidden">
+      <View className="h-12 w-12 rounded-full overflow-hidden mr-3">
+        <Skeleton  />
+      </View>
+
+      {/* Content Skeleton */}
+      <View className="flex-1">
+        {/* Name and Timestamp Skeleton */}
+        <View className="flex-row justify-between items-center">
+          <View className="w-1/3 h-4 bg-gray-200 rounded" />
+          <View className="w-1/4 h-3 bg-gray-200 rounded" />
+        </View>
+
+        <View className="flex-row items-center mt-2">
+          <View className="w-2/3 h-3 bg-gray-200 rounded" />
+          <View className="ml-2 w-4 h-4 bg-gray-200 rounded" />
+        </View>
+      </View>
+    </View>
+  );
+};

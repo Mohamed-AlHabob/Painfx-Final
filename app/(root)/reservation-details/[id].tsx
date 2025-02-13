@@ -48,7 +48,7 @@ const ReservationDetails = () => {
   const { id } = useLocalSearchParams<{ id: string }>();
   const [reservation, setReservation] = useState<ReservationDetails | null>(null);
   const [loading, setLoading] = useState(true);
-  const [refreshing, setRefreshing] = useState(false); // State for refresh control
+  const [refreshing, setRefreshing] = useState(false);
   const windowHeight = Dimensions.get("window").height;
 
   const fetchReservation = useCallback(async () => {
@@ -62,7 +62,7 @@ const ReservationDetails = () => {
       console.error("Error fetching reservation:", error);
     } finally {
       setLoading(false);
-      setRefreshing(false); // Stop refreshing after data is fetched
+      setRefreshing(false);
     }
   }, [id]);
 

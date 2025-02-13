@@ -1,15 +1,23 @@
+import "./global.css";
 import { useEffect } from "react";
 import { Stack } from "expo-router";
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
-import { ActivityIndicator, View } from "react-native"; // Import ActivityIndicator for loading state
-
-import "./global.css";
+import { ActivityIndicator, View } from "react-native";
 import useAuthCheck from "@/core/hooks/useauth";
+import { StatusBar } from "expo-status-bar";
+import { initNetworkListener } from "@/core/utils/network";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 export default function RootLayout() {
   const { isLogged, loading } = useAuthCheck();
-  const [fontsLoaded] = useFonts({
+
+  useEffect(() => {
+    initNetworkListener();
+  }, []);
+
+  const [fontsLoaded, fontError] = useFonts({
     "Rubik-Bold": require("../assets/fonts/Rubik-Bold.ttf"),
     "Rubik-ExtraBold": require("../assets/fonts/Rubik-ExtraBold.ttf"),
     "Rubik-Light": require("../assets/fonts/Rubik-Light.ttf"),
@@ -19,13 +27,19 @@ export default function RootLayout() {
   });
 
   useEffect(() => {
+    if (fontError) {
+      console.error("Font loading error:", fontError);
+    }
+  }, [fontError]);
+
+  useEffect(() => {
     if (fontsLoaded && !loading) {
+      console.log("Fonts and authentication loaded.");
       SplashScreen.hideAsync();
     }
   }, [fontsLoaded, loading]);
 
-  // Show a loading indicator if fonts are not loaded or auth check is still in progress
-  if (!fontsLoaded || loading) {
+  if (!fontsLoaded) {
     return (
       <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
         <ActivityIndicator size="large" color="#0000ff" />
@@ -33,13 +47,14 @@ export default function RootLayout() {
     );
   }
 
+  console.log("Rendering app. isLogged:", isLogged);
+
   return (
-    <Stack screenOptions={{ headerShown: false }}>
-      {isLogged ? (
-        <Stack.Screen name="(root)" />
-      ) : (
-        <Stack.Screen name="(auth)/login" />
-      )}
-    </Stack>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+    <SafeAreaView style={{ flex: 1 }}>
+      <Stack screenOptions={{ headerShown: false }} />
+      <StatusBar style="auto" />
+    </SafeAreaView>
+    </GestureHandlerRootView>
   );
 }

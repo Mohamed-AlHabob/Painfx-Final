@@ -1,8 +1,9 @@
 import { ActivityIndicator, FlatList, Text, TouchableOpacity, View } from "react-native";
 import { formatDistanceToNow } from "date-fns"
 import { useGlobalStore } from "@/core/store";
-import NoResults from "@/components/NoResults";
+
 import { Avatar } from "@/components/ui/avatar";
+import NoResults from "@/components/global/NoResults";
 
 
 

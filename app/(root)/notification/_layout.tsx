@@ -15,7 +15,7 @@ export const MaterialTopTabs = withLayoutContext<
   MaterialTopTabNavigationEventMap
 >(Navigator);
 
-const Layout = () => {
+const CostomLayout = () => {
   return (
     <MaterialTopTabs
       screenOptions={{
@@ -26,8 +26,9 @@ const Layout = () => {
     >
       <MaterialTopTabs.Screen name="index" options={{ title: "All" }} />
       <MaterialTopTabs.Screen name="requests" options={{ title: "Requests" }} />
+      <MaterialTopTabs.Screen name="test" options={{ title: "Test" }} />
     </MaterialTopTabs>
   );
 };
 
-export default Layout;
+export default CostomLayout;

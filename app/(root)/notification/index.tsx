@@ -3,7 +3,7 @@ import { ActivityIndicator, FlatList, View } from "react-native"
 import { router } from "expo-router"
 import api from "@/core/api"
 import { ENDPOINTS } from "@/core/config"
-import NoResults from "@/components/NoResults"
+import NoResults from "@/components/global/NoResults"
 import NotificationCard from "@/components/NotificationCard"
 
 const Notifications = () => {
@@ -17,7 +17,7 @@ const Notifications = () => {
       const response = await api.get(ENDPOINTS.NOTIFICATIONS)
 
       if (response.data && response.data) {
-        setNotifications(response.data)
+        setNotifications(response.data.results)
       } else {
         setNotifications([])
       }
@@ -41,10 +41,8 @@ const Notifications = () => {
   const handleNotificationPress = useCallback((id: string) => {
     router.push(`/(root)/(modals)/show-media/${id}`);
   }, [])
-
-
   const renderItem = useCallback(({ item }) => <NotificationCard item={item} />, [handleNotificationPress])
-
+  
 
   return (
       <FlatList

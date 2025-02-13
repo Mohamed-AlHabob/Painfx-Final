@@ -1,8 +1,8 @@
 import type React from "react"
-import { View, Text, Pressable } from "react-native"
+import { View, Text, Pressable,Image } from "react-native"
 import { format } from "date-fns"
-import { Calendar, Clock, MapPin, User, X } from "phosphor-react-native"
 import { Link } from "expo-router"
+import icons from "@/constants/icons"
 
 interface Reservation {
   id: string
@@ -68,23 +68,23 @@ const ReservationCard: React.FC<ReservationCardProps> = ({ reservation, onCancel
 
           <View className="space-y-3 mb-4">
             <View className="flex-row items-center">
-              <Calendar weight="bold" size={18} color="#4B5563" />
+            <Image source={icons.calendar} className="size-5" />
               <Text className="ml-3 text-gray-700 font-medium">{formattedDate}</Text>
             </View>
             <View className="flex-row items-center">
-              <Clock weight="bold" size={18} color="#4B5563" />
+            <Image source={icons.carPark} className="size-5" />
               <Text className="ml-3 text-gray-700 font-medium">{formattedTime}</Text>
             </View>
             {reservation.clinic && (
               <View className="flex-row items-center">
-                <MapPin weight="bold" size={18} color="#4B5563" />
+                <Image source={icons.carPark} className="size-5" />
                 <Text className="ml-3 text-gray-700 font-medium">
                   {reservation.clinic.address || "Unknown Address"}
                 </Text>
               </View>
             )}
             <View className="flex-row items-center">
-              <User weight="bold" size={18} color="#4B5563" />
+            <Image source={icons.person} className="size-5" />
               <Text className="ml-3 text-gray-700 font-medium">{`${reservation.patient.user.first_name} ${reservation.patient.user.last_name}`}</Text>
             </View>
           </View>
@@ -103,7 +103,7 @@ const ReservationCard: React.FC<ReservationCardProps> = ({ reservation, onCancel
                 className="bg-gray-200 px-4 py-2 rounded-full flex-row items-center"
                 onPress={() => onCancel(reservation.id)}
               >
-                <X size={16} color="#4B5563" />
+                <Image source={icons.backArrow} className="size-5" />
                 <Text className="ml-2 text-gray-700 font-medium">Cancel</Text>
               </Pressable>
             </View>

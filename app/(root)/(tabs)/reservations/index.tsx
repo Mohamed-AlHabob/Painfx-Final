@@ -1,11 +1,11 @@
 import { useEffect, useState, useCallback } from "react"
 import { ActivityIndicator, FlatList, View, Text } from "react-native"
 import { router } from "expo-router"
-import { SafeAreaView } from "react-native-safe-area-context"
 import api from "@/core/api"
 import { ENDPOINTS } from "@/core/config"
 import ReservationCard from "@/components/reservation/ReservationCard"
-import NoResults from "@/components/NoResults"
+import NoResults from "@/components/global/NoResults"
+
 
 const Reservations = () => {
   const [reservations, setReservations] = useState([])
@@ -43,11 +43,12 @@ const Reservations = () => {
     router.push(`/reservations/${id}`);
   }, [])
 
-  const renderItem = useCallback(({ item }) => <ReservationCard reservation={item}  />, [handleRservationPress])
+  const renderItem = useCallback(({ item }) => <ReservationCard reservation={item} onCancel={function (id: string): void {
+    throw new Error("Function not implemented.")
+  } }  />, [handleRservationPress])
 
 
   return (
-    <SafeAreaView className="flex-1">
       <FlatList
         data={reservations}
         renderItem={renderItem}
@@ -66,7 +67,6 @@ const Reservations = () => {
         onRefresh={handleRefresh}
         refreshing={refreshing}
       />
-    </SafeAreaView>
   )
 }
 

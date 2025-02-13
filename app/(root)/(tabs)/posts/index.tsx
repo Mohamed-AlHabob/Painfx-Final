@@ -1,72 +1,66 @@
-import { useEffect, useState, useCallback } from "react"
-import { ActivityIndicator, FlatList, View,Text, Image, Pressable } from "react-native"
-import { router } from "expo-router"
-import api from "@/core/api"
-import { ENDPOINTS } from "@/core/config"
-import PostCard from "@/components/post/PostItem"
-import NoResults from "@/components/NoResults"
-import icons from "@/constants/icons"
+import React, { useEffect, useState, useCallback } from "react";
+import { ActivityIndicator, FlatList, View, Text, Image, Pressable } from "react-native";
+import { getPosts } from "@/core/api";
+import NoResults from "@/components/global/NoResults";
+import { PostCard } from "@/components/post/PostCard";
 
 const Posts = () => {
-  const [posts, setPosts] = useState([])
-  const [loading, setLoading] = useState(true)
-  const [refreshing, setRefreshing] = useState(false)
+  const [posts, setPosts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
 
+  // Fetch posts from the API
   const fetchPosts = useCallback(async () => {
     try {
-      setLoading(true)
-      const response = await api.get(ENDPOINTS.POSTS)
-
-      if (response.data && response.data.results) {
-        setPosts(response.data.results)
-      } else {
-        setPosts([])
-      }
+      const response = await getPosts();
+      setPosts(response.results);
     } catch (error) {
-      console.error("Error fetching posts:", error)
+      console.error("Error fetching posts:", error);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }, [])
+  }, []);
 
+
+
+  // Fetch posts on component mount
   useEffect(() => {
-    fetchPosts()
-  }, [fetchPosts])
+    fetchPosts();
+  }, [fetchPosts]);
 
+  // Handle pull-to-refresh
   const handleRefresh = useCallback(async () => {
-    setRefreshing(true)
-    await fetchPosts()
-    setRefreshing(false)
-  }, [fetchPosts])
+    setRefreshing(true);
+    await fetchPosts();
+    setRefreshing(false);
+  }, [fetchPosts]);
 
-  const handlePostPress = useCallback((id: string) => {
-    router.push(`/(root)/(modals)/show-media/${id}`);
-  }, [])
-
-  const renderItem = useCallback(({ item }) => <PostCard item={item} onPress={handlePostPress} />, [handlePostPress])
-
+  const renderItem = useCallback(({ item }) => <PostCard item={item} />, []);
 
   return (
-      <><FlatList
+    <FlatList
       data={posts}
       renderItem={renderItem}
       keyExtractor={(item) => item.id}
       contentContainerClassName="pb-20"
       showsVerticalScrollIndicator={false}
-      ListEmptyComponent={loading ? (
-        <ActivityIndicator size="large" className="text-primary-300 mt-5" />
-      ) : (
-        <View className="flex-1 items-center justify-center p-4">
-          <NoResults />
-        </View>
-      )}
+      ListEmptyComponent={
+        loading ? (
+          <>
+          <PostCard.Skeleton />
+          <PostCard.Skeleton />
+          <PostCard.Skeleton />
+          </>
+        ) : (
+          <View className="flex-1 items-center justify-center p-4">
+            <NoResults />
+          </View>
+        )
+      }
       onRefresh={handleRefresh}
-      refreshing={refreshing} /><Pressable onPress={handleNewPostPress => ({})}>
-        <Image source={icons.info} className="size-5" />
-        <Text>New Post</Text>
-      </Pressable></>
-  )
-}
+      refreshing={refreshing}
+    />
+  );
+};
 
-export default Posts
-
+export default Posts;

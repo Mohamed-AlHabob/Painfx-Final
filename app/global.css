@@ -1,3 +1,11 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.tab-bar {
+    transition: transform 0.3s ease-in-out;
+  }
+  
+  .tab-bar.scroll-down {
+    transform: translateY(100%);
+  }

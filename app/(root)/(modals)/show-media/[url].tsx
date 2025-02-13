@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { View, TouchableOpacity, Dimensions, Image as RNImage } from 'react-native';
+import { View, TouchableOpacity, Dimensions, Image } from 'react-native';
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
-import { Image } from 'expo-image';
 import { Video, ResizeMode } from 'expo-av';
 import { Feather } from '@expo/vector-icons';
 
@@ -15,7 +14,7 @@ export default function MediaViewerPage() {
 
   useEffect(() => {
     if (type === 'image' && typeof url === 'string') {
-        RNImage.getSize(
+        Image.getSize(
         url,
         (width, height) => {
           setAspectRatio(width / height);
@@ -51,8 +50,7 @@ export default function MediaViewerPage() {
           <Image
             source={{ uri: url }}
             style={containerStyle}
-            contentFit="contain"
-            transition={200}
+            // transition={200}
           />
         )}
         {type === 'video' && typeof url === 'string' && (

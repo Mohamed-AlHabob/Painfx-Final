@@ -7,28 +7,21 @@ import {
   Text,
   TouchableOpacity,
   View,
-  Linking,
 } from "react-native";
 import { Link, Redirect } from "expo-router";
-import continueWithSocialAuth from "@/core/socialAuth";
 import images from "@/constants/images";
 import icons from "@/constants/icons";
 import { useGlobalStore } from "@/core/store";
+import useAuthCheck from "@/core/hooks/useauth";
 
 const Auth = () => {
-  const { loading, isLogged } = useGlobalStore();
+  const { loading, isLogged } = useAuthCheck();
 
-  if (!loading && isLogged) return <Redirect href="/(root)/(tabs)/chat" />;
+  if (!loading && isLogged) return <Redirect href="/(root)/(tabs)/chat/recent" />;
 
   const handleLoginWithGoogle = async () => {
     try {
-      const authUrl = await continueWithSocialAuth("google", "auth");
-      const canOpen = await Linking.canOpenURL(authUrl);
-      if (canOpen) {
-        await Linking.openURL(authUrl);
-      } else {
-        Alert.alert("Error", "Unable to open the URL.");
-      }
+
     } catch (error) {
       console.error("Login error:", error);
       Alert.alert("Error", "Failed to login. Please try again.");
@@ -44,7 +37,7 @@ const Auth = () => {
       >
         <Image
           source={images.onboarding}
-          className="w-full h-3/6"
+          className="w-full h-2/6 my-16"
           resizeMode="contain"
         />
 

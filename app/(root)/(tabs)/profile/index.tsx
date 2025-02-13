@@ -2,14 +2,12 @@ import {
   Alert,
   Image,
   ImageSourcePropType,
-  SafeAreaView,
   ScrollView,
   Text,
   TouchableOpacity,
   View,
 } from "react-native";
 import icons from "@/constants/icons";
-import { settings } from "@/constants/data";
 import { useGlobalStore } from "@/core/store";
 import { removeAuthTokens } from "@/core/auth";
 import { Link } from "expo-router";
@@ -22,6 +20,42 @@ interface SettingsItemProp {
   textStyle?: string;
   showArrow?: boolean;
 }
+
+const settings = [
+  {
+    title: "My Bookings",
+    icon: icons.calendar,
+  },
+  {
+    title: "Payments",
+    icon: icons.wallet,
+  },
+  {
+    title: "Profile",
+    icon: icons.person,
+  },
+  {
+    title: "Notifications",
+    icon: icons.bell,
+  },
+  {
+    title: "Security",
+    icon: icons.shield,
+  },
+  {
+    title: "Language",
+    icon: icons.language,
+  },
+  {
+    title: "Help Center",
+    icon: icons.info,
+  },
+  {
+    title: "Invite Friends",
+    icon: icons.people,
+  },
+];
+
 
 const SettingsItem = ({
   icon,
@@ -47,10 +81,6 @@ const SettingsItem = ({
 
 const Profile = () => {
   const { user, refetch } = useGlobalStore();
-
-
-  console.log(user);
-
   const handleLogout = async () => {
     Alert.alert("Logout", "Are you sure you want to logout?", [
       {
@@ -69,7 +99,6 @@ const Profile = () => {
   };
 
   return (
-    <SafeAreaView className="h-full bg-white">
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerClassName="pb-32 px-7"
@@ -120,7 +149,6 @@ const Profile = () => {
           />
         </View>
       </ScrollView>
-    </SafeAreaView>
   );
 };
 

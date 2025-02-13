@@ -6,17 +6,16 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { Link, router, useLocalSearchParams } from "expo-router";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { Link, router } from "expo-router";
 
 import icons from "@/constants/icons";
 
 import Search from "@/components/Search";
-import Filters from "@/components/Filters";
-import NoResults from "@/components/NoResults";
-import { Card, FeaturedCard } from "@/components/Cards";
+import Filters from "@/components/global/Filters";
+import NoResults from "@/components/global/NoResults"
 import { useGlobalStore } from "@/core/store";
 import { Avatar } from "@/components/ui/avatar";
+import React from "react";
 
 const Home = () => {
   const { user } = useGlobalStore();
@@ -31,7 +30,6 @@ const Home = () => {
   const latestProperties: ArrayLike<any> | null | undefined = [];
 
   return (
-    <SafeAreaView className="h-full bg-white">
       <FlatList
         data={properties}
         numColumns={2}
@@ -93,12 +91,7 @@ const Home = () => {
               ) : (
                 <FlatList
                   data={latestProperties}
-                  renderItem={({ item }) => (
-                    <FeaturedCard
-                      item={item}
-                      onPress={() => handleCardPress(item.$id)}
-                    />
-                  )}
+                  renderItem={({ item }) => () => handleCardPress(item.$id)}
                   keyExtractor={(item) => item.$id}
                   horizontal
                   showsHorizontalScrollIndicator={false}
@@ -126,7 +119,6 @@ const Home = () => {
           </View>
         )}
       />
-    </SafeAreaView>
   );
 };
 

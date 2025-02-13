@@ -1,11 +1,19 @@
+import { DropdownMenu } from '@/components/ui/dropdown';
 import React from 'react';
 import { View, Text, StyleSheet, Button } from 'react-native';
 
 export default function page() {
+
   return (
-    <View style={styles.container}>
-      <Text style={styles.name}>suggested</Text>
-    </View>
+    <DropdownMenu
+    options={[
+    { label: "Option 1", value: "1" },
+    { label: "Option 2", value: "2" },
+    { label: "Option 3", value: "3" },
+    ]}
+    onSelect={(value) => console.log("Selected:", value)}
+     placeholder="Choose an option"
+   />
   );
 }
 

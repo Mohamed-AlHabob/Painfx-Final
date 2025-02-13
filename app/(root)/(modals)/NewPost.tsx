@@ -1,12 +1,44 @@
-import { useState } from "react"
-import { View, Text, TextInput, Pressable, StyleSheet, SafeAreaView, ScrollView } from "react-native"
-import { useRouter } from "expo-router"
-import { Ionicons } from "@expo/vector-icons"
+import { useState } from "react";
+import { View, Text, TextInput, Pressable, StyleSheet, ScrollView, Image, Alert } from "react-native";
+import { useRouter } from "expo-router";
+import { Ionicons } from "@expo/vector-icons";
+import { createPost } from "@/core/api";
 
 export default function NewPost() {
-  const [content, setContent] = useState("")
-  const [tags, setTags] = useState(["My first post"])
-  const router = useRouter()
+  const [content, setContent] = useState("");
+  const [title, setTitle] = useState("");
+  const [tags, setTags] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const router = useRouter();
+
+
+  const handlePost = async () => {
+    if (!content || !title) {
+      Alert.alert("Error", "Please fill in both title and content.");
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const formData = new FormData();
+
+      formData.append("title", title);
+      formData.append("content", content);
+      formData.append("tags", JSON.stringify(tags));
+      const response = await createPost(formData);
+
+      if (response) {
+        Alert.alert("Success", "Post created successfully!");
+        router.back();
+      } else {
+        Alert.alert("Error", "Failed to create post.");
+      }
+    } catch (error) {
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <>
@@ -16,35 +48,37 @@ export default function NewPost() {
           <Pressable onPress={() => router.back()} style={styles.closeButton}>
             <Ionicons name="close" size={24} color="#000" />
           </Pressable>
-          <Text style={styles.headerTitle}>Post</Text>
-          <Pressable style={styles.postButton}>
-            <Text style={styles.postButtonText}>Post</Text>
+          <Text style={styles.headerTitle}>New Post</Text>
+          <Pressable
+            style={[styles.postButton, loading && styles.disabledButton]}
+            onPress={handlePost}
+            disabled={loading}
+          >
+            <Text style={styles.postButtonText}>{loading ? "Posting..." : "Post"}</Text>
           </Pressable>
         </View>
 
         {/* Input Area */}
         <TextInput
-          style={styles.input}
+          style={styles.titleInput}
+          placeholder="Title"
+          placeholderTextColor="#71717a"
+          value={title}
+          onChangeText={setTitle}
+        />
+        <TextInput
+          style={styles.contentInput}
           multiline
           placeholder="What's on your mind?"
           placeholderTextColor="#71717a"
           value={content}
           onChangeText={setContent}
         />
-        <View style={styles.instructions}>
-          <Text style={styles.instructionText}>
-            1. Post Moments in your native language and learning language. It's a two-way learning experience for you
-            and your language partners.
-          </Text>
-          <Text style={styles.instructionText}>2. Add pictures or voice notes to make your Moments stand out.</Text>
-          <Text style={styles.instructionText}>
-            3. Add multiple tags to increase the visibility of your Moments, reaching even more language partners.
-          </Text>
-        </View>
+
 
         {/* Tags Section */}
         <View style={styles.tagsContainer}>
-          <Pressable style={styles.tagButton}>
+          <Pressable style={styles.tagButton} onPress={() => setTags([...tags, "New Tag"])}>
             <Text style={styles.tagButtonText}># Add a topic</Text>
           </Pressable>
           {tags.map((tag, index) => (
@@ -57,32 +91,35 @@ export default function NewPost() {
           ))}
         </View>
       </ScrollView>
-
-      {/* Bottom Toolbar */}
       <View style={styles.toolbar}>
         <Pressable style={styles.toolbarButton}>
-          <Ionicons name="mic-outline" size={24} color="#71717a" />
+          <Ionicons name="image" size={24} color="#000" />
         </Pressable>
         <Pressable style={styles.toolbarButton}>
-          <Ionicons name="image-outline" size={24} color="#71717a" />
+          <Ionicons name="camera" size={24} color="#000" />
         </Pressable>
         <Pressable style={styles.toolbarButton}>
-          <Ionicons name="happy-outline" size={24} color="#71717a" />
+          <Ionicons name="document" size={24} color="#000" />
         </Pressable>
         <Pressable style={styles.toolbarButton}>
-          <Ionicons name="language-outline" size={24} color="#71717a" />
+          <Ionicons name="location" size={24} color="#000" />
         </Pressable>
         <Pressable style={styles.toolbarButton}>
-          <Ionicons name="add-circle-outline" size={24} color="#71717a" />
+          <Ionicons name="people" size={24} color="#000" />
         </Pressable>
       </View>
-    </>
-  )
+      </>
+  );
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#fff",
+  },
   scrollContent: {
     flexGrow: 1,
+    paddingBottom: 80, // Space for the toolbar
   },
   header: {
     flexDirection: "row",
@@ -90,7 +127,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     padding: 16,
     borderBottomWidth: 1,
-    borderBottomColor: "#fff",
+    borderBottomColor: "#e5e5e5",
   },
   closeButton: {
     padding: 4,
@@ -110,14 +147,22 @@ const styles = StyleSheet.create({
     color: "#71717a",
     fontWeight: "600",
   },
-  instructions: {
-    padding: 16,
+  disabledButton: {
+    opacity: 0.5,
   },
-  instructionText: {
-    color: "#71717a",
-    marginBottom: 16,
-    fontSize: 15,
-    lineHeight: 22,
+  titleInput: {
+    color: "#000",
+    fontSize: 18,
+    fontWeight: "600",
+    padding: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: "#e5e5e5",
+  },
+  contentInput: {
+    color: "#000",
+    fontSize: 16,
+    padding: 16,
+    minHeight: 150,
   },
   tagsContainer: {
     flexDirection: "row",
@@ -133,12 +178,6 @@ const styles = StyleSheet.create({
   },
   tagButtonText: {
     color: "#71717a",
-  },
-  input: {
-    color: "#000",
-    fontSize: 16,
-    padding: 16,
-    minHeight: 100,
   },
   tag: {
     backgroundColor: "#D8D8D8",
@@ -161,9 +200,10 @@ const styles = StyleSheet.create({
     justifyContent: "space-around",
     paddingVertical: 12,
     backgroundColor: "#fff",
+    borderTopWidth: 1,
+    borderTopColor: "#e5e5e5",
   },
   toolbarButton: {
     padding: 8,
   },
-})
-
+});

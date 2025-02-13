@@ -15,7 +15,7 @@ export default function Signup() {
 
   const handleRegister = async () => {
     try {
-      const response = await api.post(ENDPOINTS.REGISTER, {
+      const response = await api.post(ENDPOINTS.USER, {
         email,
         password,
       });

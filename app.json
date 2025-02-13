@@ -9,13 +9,17 @@
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "jsEngine": "hermes"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.super_nova_softwareco.painfx",
+      "enableProguardInReleaseBuilds": true,
+      "jsEngine": "hermes"
     },
     "web": {
       "bundler": "metro",
@@ -32,10 +36,20 @@
           "resizeMode": "contain",
           "backgroundColor": "#ffffff"
         }
-      ]
+      ],
+      "expo-optimize"
     ],
     "experiments": {
       "typedRoutes": true
-    }
+    },
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "ad9c3447-28b0-45bf-9591-89afbc3fcf6d"
+      }
+    },
+    "owner": "super_nova_softwareco"
   }
 }

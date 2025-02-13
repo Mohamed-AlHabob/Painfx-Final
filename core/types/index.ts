@@ -35,6 +35,7 @@ export interface UserProfile {
     friend: User
     preview: string
     updated_at: string
+    unread: boolean
   }
   
   export interface Message {
@@ -44,6 +45,7 @@ export interface UserProfile {
     unread: boolean
     user: User
     created_at: string
+    status?: "pending" | "sent";
   }
   
   

@@ -2,7 +2,15 @@ import React, { useState } from "react";
 import { router, useLocalSearchParams } from "expo-router";
 import { Text, ScrollView, TouchableOpacity } from "react-native";
 
-import { categories } from "@/constants/data";
+const categories = [
+  { title: "All", category: "all" },
+  { title: "Reviews", category: "reviews" },
+  { title: "Cases", category: "cases" },
+  { title: "Ratings", category: "ratings" },
+  { title: "Posts", category: "posts" },
+  { title: "Activity", category: "activity" },
+  { title: "Others", category: "others" },
+];
 
 const Filters = () => {
   const params = useLocalSearchParams<{ filter?: string }>();

@@ -1,8 +1,7 @@
 import React from "react"
-import { View, Pressable, Text } from "react-native"
-import { Image as ExpoImage } from "expo-image"
+import { View, Pressable, Text,Image } from "react-native"
 import { Video } from "expo-av"
-import { Play } from "phosphor-react-native"
+import icons from "@/constants/icons"
 
 interface MediaAttachment {
   id: string
@@ -27,7 +26,7 @@ const MediaItem = ({ attachment }: { attachment: MediaAttachment }) => {
         />
         <View className="absolute inset-0 items-center justify-center">
           <View className="bg-black/50 rounded-full p-2">
-            <Play size={24} color="#FFFFFF" weight="fill" />
+          <Image source={icons.backArrow} className="size-5" />
           </View>
         </View>
       </View>
@@ -35,10 +34,9 @@ const MediaItem = ({ attachment }: { attachment: MediaAttachment }) => {
   }
 
   return (
-    <ExpoImage
+    <Image
       source={{ uri: attachment.file }}
       className="h-full w-full"
-      contentFit="cover"
     />
   )
 }
