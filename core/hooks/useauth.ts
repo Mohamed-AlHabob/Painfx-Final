@@ -2,7 +2,7 @@ import { useEffect, useCallback } from "react";
 import { useGlobalStore } from "@/core/store";
 import { isAuthenticated } from "@/core/auth";
 
-const useAuthCheck = () => {
+export const useAuthCheck = () => {
   const { fetchUser, isLogged, loading, setLoading } = useGlobalStore();
 
   const checkAuth = useCallback(async () => {
@@ -27,5 +27,3 @@ const useAuthCheck = () => {
 
   return { isLogged, loading };
 };
-
-export default useAuthCheck;

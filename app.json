@@ -18,7 +18,6 @@
         "backgroundColor": "#ffffff"
       },
       "package": "com.super_nova_softwareco.painfx",
-      "enableProguardInReleaseBuilds": true,
       "jsEngine": "hermes"
     },
     "web": {
@@ -36,8 +35,7 @@
           "resizeMode": "contain",
           "backgroundColor": "#ffffff"
         }
-      ],
-      "expo-optimize"
+      ]
     ],
     "experiments": {
       "typedRoutes": true

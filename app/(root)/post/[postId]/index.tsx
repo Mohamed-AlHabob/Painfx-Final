@@ -10,7 +10,7 @@ import {
 } from "react-native";
 import { router, useLocalSearchParams } from "expo-router";
 import icons from "@/constants/icons";
-import { createComment, getPost, getPostComments } from "@/core/api";
+import { createComment, getPostById, getPostComments } from "@/core/api";
 import { PostCard } from "@/components/post/PostCard";
 import { CommentCard } from "@/components/post/CommentCard";
 import { Input } from "@/components/global/Input";
@@ -46,7 +46,7 @@ interface Post {
 }
 
 export default function PostDetailScreen() {
-  const { id } = useLocalSearchParams();
+  const { postId } = useLocalSearchParams();
   const [post, setPost] = useState<Post | null>(null);
   const [comments, setComments] = useState<Comment[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -59,8 +59,8 @@ export default function PostDetailScreen() {
       try {
         setIsLoading(true);
         const [postData, commentsData] = await Promise.all([
-          getPost(id as string),
-          getPostComments(id as string),
+          getPostById(postId as string),
+          getPostComments(postId as string),
         ]);
 
         if (isMounted) {
@@ -79,11 +79,11 @@ export default function PostDetailScreen() {
     return () => {
       isMounted = false;
     };
-  }, [id]);
+  }, [postId]);
 
   const handleSubmitComment = async (text: string) => {
     try {
-      const newComment = await createComment(id as string, text);
+      const newComment = await createComment( text);
       setComments((prev) => [newComment, ...prev]);
     } catch (err) {
       setError("Failed to submit comment. Please try again.");
@@ -139,7 +139,7 @@ export default function PostDetailScreen() {
             <Text className="text-gray-500">No comments yet</Text>
           </View>
         }
-        renderItem={({ item }) => <CommentCard key={item.id} comment={item} postId={id as string} />}
+        renderItem={({ item }) => <CommentCard key={item.id} comment={item} postId={postId as string} />}
         ListFooterComponent={<View style={{ height: 80 }} />}
         contentContainerClassName="pb-20"
       />

@@ -1,17 +1,18 @@
+// _layout.tsx
 import "./global.css";
 import { useEffect } from "react";
 import { Stack } from "expo-router";
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
 import { ActivityIndicator, View } from "react-native";
-import useAuthCheck from "@/core/hooks/useauth";
 import { StatusBar } from "expo-status-bar";
 import { initNetworkListener } from "@/core/utils/network";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { useAuthCheck } from "@/core/hooks/useauth";
 
 export default function RootLayout() {
-  const { isLogged, loading } = useAuthCheck();
+  const { isLogged, loading } = useAuthCheck;
 
   useEffect(() => {
     initNetworkListener();

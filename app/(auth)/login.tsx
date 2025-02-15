@@ -1,14 +1,15 @@
-import React, { useState } from "react"
-import { Text, Alert, KeyboardAvoidingView, TouchableWithoutFeedback, View, Button, Keyboard, TextInput } from "react-native"
-import { Redirect, router } from "expo-router"
-import { useGlobalStore } from "@/core/store"
-import api from "@/core/api"
-import { ENDPOINTS } from "@/core/config"
-import { setAuthTokens } from "@/core/auth"
+import React, { useState } from "react";
+import { Text, Alert, KeyboardAvoidingView, TouchableWithoutFeedback, View, Button, Keyboard, TextInput, Image, StyleSheet } from "react-native";
+import { Redirect, router } from "expo-router";
+import { useGlobalStore } from "@/core/store";
+import api from "@/core/api";
+import { ENDPOINTS } from "@/core/config";
+import { setAuthTokens } from "@/core/auth";
+import images from "@/constants/images";
 
 export default function Login() {
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const { refetch, loading, isLogged } = useGlobalStore();
 
   if (!loading && isLogged) return <Redirect href="/(root)/(tabs)/chat" />;
@@ -32,41 +33,73 @@ export default function Login() {
   };
 
   return (
-			<KeyboardAvoidingView behavior="height" style={{ flex: 1 }}>
-				<TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-					<View 
-						style={{ 
-							flex: 1, 
-							justifyContent: 'center',
-							paddingHorizontal: 20
-						}}
-					>
-						<TextInput 
-							placeholder='Email'
-							value={email}
-							onChangeText={setEmail}
-						/>
-						<TextInput 
-							placeholder='Password'
-							value={password}
-							onChangeText={setPassword}
-							secureTextEntry
-						/>
-						<Button 
-							title='Sign In' 
-							onPress={handleLogin} 
-						/>
-						<Text style={{ textAlign: 'center', marginTop: 40 }}>
-							Don't have an account? <Text 
-								style={{ color: 'blue' }}
-								onPress={() => router.push('/(auth)/signup')}
-							>
-								Sign Up
-							</Text>
-						</Text>
-
-					</View>
-				</TouchableWithoutFeedback>
-			</KeyboardAvoidingView>
-  )
+    <KeyboardAvoidingView behavior="height" style={{ flex: 1 }}>
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <View style={styles.container}>
+          <Image
+          source={images.logo}
+          className="h-20 w-20 mb-20"
+        />
+          <Text style={styles.title}>PainFX</Text>
+          <TextInput 
+            style={styles.input}
+            placeholder='Legal password 2'
+            value={email}
+            onChangeText={setEmail}
+          />
+          <TextInput 
+            style={styles.input}
+            placeholder='Password'
+            value={password}
+            onChangeText={setPassword}
+            secureTextEntry
+          />
+          <Button 
+            title='Sign in!' 
+            onPress={handleLogin} 
+          />
+          <Text style={styles.text}>
+            Already have an account? <Text 
+              style={styles.link}
+              onPress={() => router.push('/(auth)/signup')}
+            >
+              Sign Up
+            </Text>
+          </Text>
+        </View>
+      </TouchableWithoutFeedback>
+    </KeyboardAvoidingView>
+  );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: 20,
+    backgroundColor: '#fff',
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 20,
+  },
+  input: {
+    width: '100%',
+    height: 40,
+    borderColor: 'gray',
+    borderWidth: 1,
+    marginBottom: 20,
+    paddingHorizontal: 10,
+    borderRadius: 5,
+  },
+  text: {
+    marginTop: 20,
+    textAlign: 'center',
+  },
+  link: {
+    color: 'blue',
+    textDecorationLine: 'underline',
+  },
+});

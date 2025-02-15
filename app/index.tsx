@@ -11,17 +11,20 @@ import {
 import { Link, Redirect } from "expo-router";
 import images from "@/constants/images";
 import icons from "@/constants/icons";
-import { useGlobalStore } from "@/core/store";
-import useAuthCheck from "@/core/hooks/useauth";
+import { useAuthCheck } from "@/core/hooks/useauth";
+
 
 const Auth = () => {
-  const { loading, isLogged } = useAuthCheck();
+  const { loading, isLogged } = useAuthCheck(); 
 
-  if (!loading && isLogged) return <Redirect href="/(root)/(tabs)/chat/recent" />;
+  // Redirect to the chat screen if the user is already logged in
+  if (!loading && isLogged) {
+    return <Redirect href="/(root)/(tabs)/chat/recent" />;
+  }
 
   const handleLoginWithGoogle = async () => {
     try {
-
+      // Handle Google login logic here
     } catch (error) {
       console.error("Login error:", error);
       Alert.alert("Error", "Failed to login. Please try again.");

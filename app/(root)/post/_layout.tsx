@@ -4,7 +4,14 @@ export default function CostomLayout() {
   return (
     <Stack>
       <Stack.Screen
-        name="[id]"
+        name="[postId]/index"
+        options={{
+          animation: 'slide_from_right',
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="[postId]/reply/[commentId]"
         options={{
           animation: 'slide_from_right',
           headerShown: false,

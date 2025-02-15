@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState, useCallback } from "react";
+import React, { useEffect, useRef, useState, useCallback, useMemo } from "react";
 import {
   View,
   Text,
@@ -22,6 +22,7 @@ import { Input } from "@/components/global/Input";
 
 const ChatPage: React.FC = () => {
   const { id } = useLocalSearchParams<{ id: string }>();
+  const sanitizedId = id?.replace(/[^a-zA-Z0-9-_]/g, ""); // Sanitize the ID
   const router = useRouter();
   const {
     user,
@@ -36,11 +37,12 @@ const ChatPage: React.FC = () => {
   const flatListRef = useRef<FlatList<Message>>(null);
   const isOnline = useNetworkStatus();
 
-  // Fetch cached messages when offline
   useEffect(() => {
+    let isMounted = true;
+
     const fetchCachedMessages = async () => {
-      if (!isOnline) {
-        const cachedMessages = await getCachedData(`chat_${id}`);
+      if (!isOnline && isMounted) {
+        const cachedMessages = await getCachedData(`chat_${sanitizedId}`);
         if (cachedMessages) {
           useGlobalStore.setState({ messagesList: cachedMessages });
         }
@@ -48,27 +50,29 @@ const ChatPage: React.FC = () => {
     };
 
     fetchCachedMessages();
-  }, [id, isOnline]);
 
-  // Connect to WebSocket and fetch messages when online
+    return () => {
+      isMounted = false;
+    };
+  }, [sanitizedId, isOnline]);
+
   useEffect(() => {
     if (isOnline) {
       socketConnect();
-      if (id) {
-        messageList(id);
+      if (sanitizedId) {
+        messageList(sanitizedId);
       }
     }
-  }, [id, isOnline, socketConnect, messageList]);
+  }, [sanitizedId, isOnline, socketConnect, messageList]);
 
   useEffect(() => {
     if (messagesList.length > 0) {
-      cacheData(`chat_${id}`, messagesList);
+      cacheData(`chat_${sanitizedId}`, messagesList);
     }
-  }, [id, messagesList]);
+  }, [sanitizedId, messagesList]);
 
-  // Handle sending a message
   const handleSendMessage = async (text: string) => {
-    if (!text.trim() || !id) return;
+    if (!text.trim() || !sanitizedId) return;
 
     const newMessage: Message = {
       id: `temp_${Date.now()}`,
@@ -77,27 +81,31 @@ const ChatPage: React.FC = () => {
       created_at: new Date().toISOString(),
       status: "pending",
       is_me: false,
-      unread: false
+      unread: false,
     };
 
     try {
       setIsSending(true);
 
       if (isOnline) {
-        await messageSend(id, text.trim());
-        const updatedMessages = messagesList.map((msg) =>
-          msg.id === newMessage.id ? { ...msg, status: "sent" } : msg
-        );
-        useGlobalStore.setState({ messagesList: updatedMessages });
-        await cacheData(`chat_${id}`, updatedMessages);
+        await messageSend(sanitizedId, text.trim());
+        useGlobalStore.setState((state) => ({
+          messagesList: state.messagesList.map((msg) =>
+            msg.id === newMessage.id ? { ...msg, status: "sent" } : msg
+          ),
+        }));
       } else {
-        // Store message locally if offline
-        const updatedMessages = [newMessage, ...messagesList];
-        useGlobalStore.setState({ messagesList: updatedMessages });
-        await cacheData(`chat_${id}`, updatedMessages);
+        useGlobalStore.setState((state) => ({
+          messagesList: [newMessage, ...state.messagesList],
+        }));
       }
     } catch (err) {
       console.error("Error sending message:", err);
+      useGlobalStore.setState((state) => ({
+        messagesList: state.messagesList.map((msg) =>
+          msg.id === newMessage.id ? { ...msg, status: "failed" } : msg
+        ),
+      }));
     } finally {
       setIsSending(false);
     }
@@ -116,7 +124,7 @@ const ChatPage: React.FC = () => {
         </Text>
         {item.status === "pending" && (
           <View className="px-2 py-1 flex-row items-center justify-between border-t border-gray-100 mt-3">
-            <Pressable>
+            <Pressable accessibilityRole="button" accessibilityLabel="Message info">
               <Image source={icons.info} className="size-3" />
             </Pressable>
           </View>
@@ -128,7 +136,12 @@ const ChatPage: React.FC = () => {
 
   const renderHeader = () => (
     <View className="flex-row items-center justify-between p-4 border-b border-gray-200 bg-white">
-      <Pressable onPress={() => router.back()} className="p-2">
+      <Pressable
+        onPress={() => router.back()}
+        className="p-2"
+        accessibilityRole="button"
+        accessibilityLabel="Go back"
+      >
         <Ionicons name="arrow-back" size={24} color="#374151" />
       </Pressable>
       <View className="flex-row items-center">
@@ -140,14 +153,19 @@ const ChatPage: React.FC = () => {
           {messagesTyping && <Text className="text-sm text-gray-500">Typing...</Text>}
         </View>
       </View>
-      <Pressable className="p-2">
+      <Pressable className="p-2" accessibilityRole="button" accessibilityLabel="More options">
         <Ionicons name="ellipsis-vertical" size={24} color="#374151" />
       </Pressable>
     </View>
   );
 
-  const uniqueMessages = messagesList.filter(
-    (message, index, self) => index === self.findIndex((t) => t.id === message.id),
+  const uniqueMessages = useMemo(
+    () =>
+      messagesList.filter(
+        (message, index, self) =>
+          index === self.findIndex((t) => t.id === message.id)
+      ),
+    [messagesList]
   );
 
   return (
@@ -162,12 +180,13 @@ const ChatPage: React.FC = () => {
         contentContainerStyle={{ paddingHorizontal: 16, paddingTop: 16 }}
         onEndReached={() => {
           if (messagesNext) {
-            messageList(id, messagesNext);
+            messageList(sanitizedId, messagesNext);
           }
         }}
         onEndReachedThreshold={0.1}
         ListFooterComponent={messagesNext ? <ActivityIndicator size="small" color="#6366F1" /> : null}
       />
+      <View className=" mt-20" />
       <Input onSubmit={handleSendMessage} isSubmitting={isSending} placeholder={`Type to ${user?.first_name} ${user?.last_name} a message...` || "Type a message..."} />
       {!isOnline && (
         <View className="absolute top-0 left-0 right-0 p-2 bg-yellow-500">

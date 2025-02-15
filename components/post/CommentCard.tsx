@@ -1,13 +1,10 @@
-import React, { useState } from "react";
-import { View, Text, Pressable, Image, TextInput, ActivityIndicator, Alert } from "react-native";
+import { View, Text, Pressable, Image} from "react-native";
 import { formatDistanceToNow } from "date-fns";
-import { router } from "expo-router";
+import { Link, router } from "expo-router";
 import icons from "@/constants/icons";
-import { replyToComment, deleteComment, updateComment } from "@/core/api";
 import { Avatar } from "../ui/avatar";
 import { Skeleton } from "../global/skeleton";
 import { useGlobalStore } from "@/core/store";
-import { DropdownMenu } from "../ui/dropdown";
 
 interface Comment {
   id: string;
@@ -31,27 +28,21 @@ interface Comment {
 
 interface CommentCardProps {
   comment: Comment;
-  isReply?: boolean;
   postId: string;
 }
 
+export const CommentCard = ({ comment, postId }: CommentCardProps) => {
+  // const { user } = useGlobalStore();
 
 
-export const CommentCard = ({ comment, isReply = false, postId }: CommentCardProps) => {
-  const { user } = useGlobalStore();
-  const [replies, setReplies] = useState(comment.replies);
-
-
-  const isCommentCreator = user?.id === comment.user.id;
+  // const isCommentCreator = user?.id === comment.user.id;
 
   const handleProfilePress = () => {
     router.push(`/(root)/profile/${comment.user.id}`);
   };
 
-
-
   return (
-    <View className={`${isReply ? "ml-7" : "bg-white rounded-2xl shadow-sm mt-2 mx-4 overflow-hidden"}`}>
+    <View className="bg-white rounded-2xl shadow-sm mt-2 mx-4 overflow-hidden">
       <View className="flex-row p-4">
         <Pressable onPress={handleProfilePress} accessibilityRole="button" accessibilityLabel="User profile">
           <View className="rounded-full overflow-hidden bg-gray-100">
@@ -72,27 +63,23 @@ export const CommentCard = ({ comment, isReply = false, postId }: CommentCardPro
               <Text className="text-gray-500 text-xs ml-2">• {formatDistanceToNow(new Date(comment.created_at), { addSuffix: true })}</Text>
             </View>
           </View>
-          <Text className="text-gray-600 text-sm mt-1">{comment.text}</Text>
-          <View className="flex-row items-center mt-2 space-x-4">
-            <Pressable
-              className="flex-row items-center"
-              accessibilityRole="button"
-              accessibilityLabel="Reply to comment"
-            >
-              <Image source={icons.chat} className="size-4" />
-              <Text className="ml-2 text-gray-500 text-xs">Reply</Text>
+          <Link href={`/post/${postId}/reply/${comment.id}`} asChild>
+            <Pressable>
+              <Text className="text-gray-600 text-sm mt-1">{comment.text}</Text>
+              <View className="flex-row items-center mt-2 space-x-4">
+                <Pressable
+                  className="flex-row items-center"
+                  accessibilityRole="button"
+                  accessibilityLabel="Reply to comment"
+                >
+                  <Image source={icons.chat} className="size-4" />
+                  <Text className="ml-2 text-gray-500 text-xs">Reply</Text>
+                </Pressable>
+              </View>
             </Pressable>
-          </View>
+          </Link>
         </View>
       </View>
-{/* 
-      {replies.length > 0 && (
-        <View className="ml-4">
-          {replies.map((reply) => (
-            <CommentCard key={reply.id} comment={reply} isReply postId={postId} />
-          ))}
-        </View>
-      )} */}
     </View>
   );
 };

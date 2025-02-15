@@ -81,7 +81,7 @@ const apiCall = async <T>(
     if (axios.isAxiosError(error)) {
       if (error.code === "ERR_NETWORK") {
         console.error("Network Error: Please check your internet connection.");
-        addToQueue(request); // Queue the request if there's a network error
+        addToQueue(request);
       } else {
         console.error(`Error in ${method.toUpperCase()} ${url}:`, error.response?.data || error.message);
       }
@@ -101,17 +101,22 @@ export const getUserProfile = () => apiCall<any>("get", "USER_PROFILE");
 
 export const updateUserProfile = (profileData: any) => apiCall<any>("put", "USER_PROFILE", profileData);
 
-export const createReservation = (reservationData: any) => apiCall<any>("post", "RESERVATIONS", reservationData);
-
 export const getPosts = () => apiCall<any[]>("get", "POSTS");
 
-export const getPost = (postId: string) => apiCall<any>("get", "POST_DETAIL", null, { params: { id: postId } });
+export const getPostById = (postId: string) =>
+  apiCall<any>("get", "POST_DETAIL", null, { params: { id: postId } });
 
 export const createPost = (postData: FormData) => apiCall<any>("post", "POSTS", postData, {
   headers: {
     "Content-Type": "multipart/form-data",
   },
 });
+
+export const updatePost = (postId: string, postData: any) =>
+  apiCall<any>("put", "POST_DETAIL", postData, { params: { id: postId } });
+
+export const deletePost = (postId: string) =>
+  apiCall<any>("delete", "POST_DETAIL", null, { params: { id: postId } });
 
 export const incrementPostViewCount = (postId: string) =>
   apiCall<any>("post", "POST_INCREMENT_VIEW_COUNT", null, { params: { id: postId } });
@@ -125,16 +130,10 @@ export const getPostLikes = (postId: string) =>
 export const getPostComments = (postId: string) =>
   apiCall<any[]>("get", "POST_COMMENTS", null, { params: { id: postId } });
 
-export const createComment = (postId: string, text: string) =>
-  apiCall<any>("post", "COMMENTS", { post: postId, text });
+export const getLikes = () => apiCall<any[]>("get", "LIKES");
 
-export const replyToComment = (commentId: string, postId: string, text: string) =>
-  apiCall<any>("post", "COMMENT_REPLY", { post: postId, text }, { params: { id: commentId } });
-
-export const updateComment = (commentId: string, text: string) =>
-  apiCall<any>("put", "COMMENT_DETAIL", { text }, { params: { id: commentId } });
-
-export const deleteComment = (commentId: string) => apiCall<any>("delete", "COMMENT_DETAIL", null, { params: { id: commentId } });
+export const getLikeById = (likeId: string) =>
+  apiCall<any>("get", "LIKES", null, { params: { id: likeId } });
 
 export const likePost = (postId: string) => apiCall<any>("post", "LIKES", { post: postId });
 
@@ -200,5 +199,141 @@ export const updateReview = (reviewId: string, reviewData: any) =>
 export const deleteReview = (reviewId: string) =>
   apiCall<any>("delete", "REVIEWS", null, { params: { id: reviewId } });
 
+export const getReservations = () => apiCall<any[]>("get", "RESERVATIONS");
+
+export const getReservationById = (reservationId: string) =>
+  apiCall<any>("get", "RESERVATIONS", null, { params: { id: reservationId } });
+
+export const createReservation = (reservationData: any) => apiCall<any>("post", "RESERVATIONS", reservationData);
+
+export const updateReservation = (reservationId: string, reservationData: any) =>
+  apiCall<any>("put", "RESERVATIONS", reservationData, { params: { id: reservationId } });
+
+export const deleteReservation = (reservationId: string) =>
+  apiCall<any>("delete", "RESERVATIONS", null, { params: { id: reservationId } });
+
+export const approveReservation = (reservationId: string) =>
+  apiCall<any>("post", "RESERVATIONS", null, { params: { id: reservationId, action: 'approve' } });
+
+export const rejectReservation = (reservationId: string, reason: string) =>
+  apiCall<any>("post", "RESERVATIONS", { reason }, { params: { id: reservationId, action: 'reject' } });
+
+export const getComments = () => apiCall<any[]>("get", "COMMENTS");
+
+export const getCommentById = (commentId: string) =>
+  apiCall<any>("get", "COMMENT_DETAIL", null, { params: { id: commentId } });
+
+export const createComment = (commentData: any) => apiCall<any>("post", "COMMENTS", commentData);
+
+export const updateComment = (commentId: string, commentData: any) =>
+  apiCall<any>("put", "COMMENT_DETAIL", commentData, { params: { id: commentId } });
+
+export const deleteComment = (commentId: string) =>
+  apiCall<any>("delete", "COMMENT_DETAIL", null, { params: { id: commentId } });
+
+export const replyToComment = async (commentId: string, post:string, text: string) => {
+  await apiCall<{ id: string,post:string , text: string }>("post", `COMMENT_REPLY`, { text,post }, { params: { id: commentId } });
+};
+
+export const getCategories = () => apiCall<any[]>("get", "CATEGORIES");
+
+export const getCategoryById = (categoryId: string) =>
+  apiCall<any>("get", "CATEGORIES", null, { params: { id: categoryId } });
+
+export const createCategory = (categoryData: any) => apiCall<any>("post", "CATEGORIES", categoryData);
+
+export const updateCategory = (categoryId: string, categoryData: any) =>
+  apiCall<any>("put", "CATEGORIES", categoryData, { params: { id: categoryId } });
+
+export const deleteCategory = (categoryId: string) =>
+  apiCall<any>("delete", "CATEGORIES", null, { params: { id: categoryId } });
+
+
+export const getSubscriptions = () => apiCall<any[]>("get", "SUBSCRIPTIONS");
+
+export const getSubscriptionById = (subscriptionId: string) =>
+  apiCall<any>("get", "SUBSCRIPTIONS", null, { params: { id: subscriptionId } });
+
+export const createSubscription = (subscriptionData: any) => apiCall<any>("post", "SUBSCRIPTIONS", subscriptionData);
+
+export const updateSubscription = (subscriptionId: string, subscriptionData: any) =>
+  apiCall<any>("put", "SUBSCRIPTIONS", subscriptionData, { params: { id: subscriptionId } });
+
+export const deleteSubscription = (subscriptionId: string) =>
+  apiCall<any>("delete", "SUBSCRIPTIONS", null, { params: { id: subscriptionId } });
+
+export const getPaymentMethods = () => apiCall<any[]>("get", "PAYMENT_METHODS");
+
+export const getPaymentMethodById = (paymentMethodId: string) =>
+  apiCall<any>("get", "PAYMENT_METHODS", null, { params: { id: paymentMethodId } });
+
+export const createPaymentMethod = (paymentMethodData: any) => apiCall<any>("post", "PAYMENT_METHODS", paymentMethodData);
+
+export const updatePaymentMethod = (paymentMethodId: string, paymentMethodData: any) =>
+  apiCall<any>("put", "PAYMENT_METHODS", paymentMethodData, { params: { id: paymentMethodId } });
+
+export const deletePaymentMethod = (paymentMethodId: string) =>
+  apiCall<any>("delete", "PAYMENT_METHODS", null, { params: { id: paymentMethodId } });
+
+export const getPayments = () => apiCall<any[]>("get", "PAYMENTS");
+
+export const getPaymentById = (paymentId: string) =>
+  apiCall<any>("get", "PAYMENTS", null, { params: { id: paymentId } });
+
+export const createPayment = (paymentData: any) => apiCall<any>("post", "PAYMENTS", paymentData);
+
+export const updatePayment = (paymentId: string, paymentData: any) =>
+  apiCall<any>("put", "PAYMENTS", paymentData, { params: { id: paymentId } });
+
+export const deletePayment = (paymentId: string) =>
+  apiCall<any>("delete", "PAYMENTS", null, { params: { id: paymentId } });
+
+export const getNotifications = () => apiCall<any[]>("get", "NOTIFICATIONS");
+
+export const getNotificationById = (notificationId: string) =>
+  apiCall<any>("get", "NOTIFICATIONS", null, { params: { id: notificationId } });
+
+export const markNotificationAsRead = (notificationId: string) =>
+  apiCall<any>("post", "NOTIFICATIONS", null, { params: { id: notificationId, action: 'mark_as_read' } });
+
+export const deleteNotification = (notificationId: string) =>
+  apiCall<any>("delete", "NOTIFICATIONS", null, { params: { id: notificationId } });
+
+export const getEventSchedules = () => apiCall<any[]>("get", "EVENT_SCHEDULES");
+
+export const getEventScheduleById = (eventScheduleId: string) =>
+  apiCall<any>("get", "EVENT_SCHEDULES", null, { params: { id: eventScheduleId } });
+
+export const createEventSchedule = (eventScheduleData: any) => apiCall<any>("post", "EVENT_SCHEDULES", eventScheduleData);
+
+export const updateEventSchedule = (eventScheduleId: string, eventScheduleData: any) =>
+  apiCall<any>("put", "EVENT_SCHEDULES", eventScheduleData, { params: { id: eventScheduleId } });
+
+export const deleteEventSchedule = (eventScheduleId: string) =>
+  apiCall<any>("delete", "EVENT_SCHEDULES", null, { params: { id: eventScheduleId } });
+
+export const getAdvertisingCampaigns = () => apiCall<any[]>("get", "ADVERTISING_CAMPAIGNS");
+
+export const getAdvertisingCampaignById = (advertisingCampaignId: string) =>
+  apiCall<any>("get", "ADVERTISING_CAMPAIGNS", null, { params: { id: advertisingCampaignId } });
+
+export const createAdvertisingCampaign = (advertisingCampaignData: any) => apiCall<any>("post", "ADVERTISING_CAMPAIGNS", advertisingCampaignData);
+
+export const updateAdvertisingCampaign = (advertisingCampaignId: string, advertisingCampaignData: any) =>
+  apiCall<any>("put", "ADVERTISING_CAMPAIGNS", advertisingCampaignData, { params: { id: advertisingCampaignId } });
+
+export const deleteAdvertisingCampaign = (advertisingCampaignId: string) =>
+  apiCall<any>("delete", "ADVERTISING_CAMPAIGNS", null, { params: { id: advertisingCampaignId } });
+
+export const getUsersAudit = () => apiCall<any[]>("get", "USERS_AUDIT");
+
+export const getUsersAuditById = (usersAuditId: string) =>
+  apiCall<any>("get", "USERS_AUDIT", null, { params: { id: usersAuditId } });
+
+export const createStripePaymentIntent = (amount: number, currency: string = 'usd') =>
+  apiCall<any>("post", "PAYMENTS", { amount, currency });
+
+export const handleStripeWebhook = (payload: any, sigHeader: string) =>
+  apiCall<any>("post", "STRIPE_WEBHOOK", payload, { headers: { 'Stripe-Signature': sigHeader } });
 
 export default api;

@@ -33,4 +33,6 @@ export const ENDPOINTS = {
   NOTIFICATIONS: "/notifications/",
   EVENT_SCHEDULES: "/event-schedules/",
   ADVERTISING_CAMPAIGNS: "/advertising-campaigns/",
+  USERS_AUDIT:"/users-audit/",
+  STRIPE_WEBHOOK:"/webhooks/stripe/",
 };
