@@ -1,29 +1,36 @@
-import { useEffect, useCallback } from "react";
-import { useGlobalStore } from "@/core/store";
-import { isAuthenticated } from "@/core/auth";
+import { useEffect, useState } from 'react';
+import { isAuthenticated, getAuthTokens, removeAuthTokens } from '@/core/utils/secureStorage';
+import { useRouter, useSegments } from 'expo-router';
 
-export const useAuthCheck = () => {
-  const { fetchUser, isLogged, loading, setLoading } = useGlobalStore();
+export const useAuth = () => {
+  const [isLogged, setIsLogged] = useState<boolean | null>(null);
+  const [loading, setLoading] = useState(true);
+  const segments = useSegments();
+  const router = useRouter();
 
-  const checkAuth = useCallback(async () => {
+  const checkAuth = async () => {
+    setLoading(true);
     try {
-      setLoading(true);
-      const authStatus = await isAuthenticated();
-      if (authStatus && !isLogged) {
-        await fetchUser();
+      const authenticated = await isAuthenticated();
+      setIsLogged(authenticated);
+
+      const inAuthGroup = segments[0] === '(root)';
+      if (authenticated && !inAuthGroup) {
+        router.replace('/(root)/(tabs)/chat');
+      } else if (!authenticated && inAuthGroup) {
+        router.replace('/(public)');
       }
     } catch (error) {
-      console.error("Error during authentication check:", error);
+      console.error('Authentication check failed:', error);
+      setIsLogged(false);
     } finally {
       setLoading(false);
     }
-  }, [fetchUser, setLoading, isLogged]);
+  };
 
   useEffect(() => {
-    if (!isLogged && !loading) {
-      checkAuth();
-    }
-  }, [checkAuth, isLogged, loading]);
+    checkAuth();
+  }, [segments]);
 
   return { isLogged, loading };
 };

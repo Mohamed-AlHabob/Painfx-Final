@@ -92,7 +92,7 @@ const apiCall = async <T>(
   }
 };
 
-export const login = (credentials: { username: string; password: string }) =>
+export const login = (credentials: { email: string; password: string }) =>
   apiCall<{ access: string; refresh: string }>("post", "LOGIN", credentials);
 
 export const register = (userData: any) => apiCall<any>("post", "USER", userData);

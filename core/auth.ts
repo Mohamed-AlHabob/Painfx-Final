@@ -1,44 +1,36 @@
-import AsyncStorage from "@react-native-async-storage/async-storage"
-import api from "./api"
-import { ENDPOINTS } from "./config"
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { ENDPOINTS } from "./config";
+import api from "./api";
+
+// Token management
 export const setAuthTokens = async (access: string, refresh: string) => {
-  await AsyncStorage.setItem("access_token", access);
-  await AsyncStorage.setItem("refresh_token", refresh);
-  console.log("Tokens set successfully");
+  await AsyncStorage.multiSet([["access_token", access], ["refresh_token", refresh]]);
 };
 
 export const getAuthTokens = async () => {
-  const access = await AsyncStorage.getItem("access_token");
-  const refresh = await AsyncStorage.getItem("refresh_token");
-  console.log("Retrieved tokens:", { access, refresh });
-  return { access, refresh };
+  const [access, refresh] = await AsyncStorage.multiGet(["access_token", "refresh_token"]);
+  return { access: access[1], refresh: refresh[1] };
 };
 
 export const removeAuthTokens = async () => {
-  await AsyncStorage.removeItem("access_token");
-  await AsyncStorage.removeItem("refresh_token");
-  console.log("Tokens removed successfully");
+  await AsyncStorage.multiRemove(["access_token", "refresh_token"]);
 };
 
 export const isAuthenticated = async () => {
-  const isAuth = await AsyncStorage.getItem("is_authenticated")
-  return isAuth === "true"
-}
+  const { access } = await getAuthTokens();
+  return !!access;
+};
 
 export const refreshAccessToken = async () => {
-  const { refresh } = await getAuthTokens()
-  if (!refresh) {
-    throw new Error("No refresh token available")
-  }
+  const { refresh } = await getAuthTokens();
+  if (!refresh) throw new Error("No refresh token available");
 
   try {
-    const response = await api.post(ENDPOINTS.TOKEN_REFRESH, { refresh })
-    await setAuthTokens(response.data.access, refresh)
-    return response.data.access
+    const response = await api.post(ENDPOINTS.TOKEN_REFRESH, { refresh });
+    await setAuthTokens(response.data.access, refresh);
+    return response.data.access;
   } catch (error) {
-    console.error("Error refreshing token:", error)
-    await removeAuthTokens()
-    throw error
+    await removeAuthTokens();
+    throw error;
   }
-}
-
+};

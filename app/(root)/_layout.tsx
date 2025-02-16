@@ -1,17 +1,11 @@
 import { useGlobalStore } from "@/core/store";
-import { Redirect, Stack } from "expo-router";
+import { Stack } from "expo-router";
 import { useEffect } from "react";
-import { ActivityIndicator } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function AppLayout() {
-  const { loading, isLogged } = useGlobalStore();
   const socketConnect = useGlobalStore(state => state.socketConnect)
 	const socketClose = useGlobalStore((state: { socketClose: any; }) => state.socketClose)
 
-
-  if (!loading && !isLogged) return <Redirect href="/(auth)/signup" />;
-  
   useEffect(() => {
 		socketConnect()
 		return () => {
@@ -19,13 +13,6 @@ export default function AppLayout() {
 		}
 	}, [])
 
-  if (loading) {
-    return (
-      <SafeAreaView className="bg-white h-full flex justify-center items-center">
-        <ActivityIndicator className="text-primary-300" size="large" />
-      </SafeAreaView>
-    );
-  }
 
   return (
     <Stack

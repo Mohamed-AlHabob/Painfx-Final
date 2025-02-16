@@ -1,4 +1,4 @@
-import { Redirect, Tabs } from "expo-router";
+import { Tabs } from "expo-router";
 import { Image, ImageSourcePropType, Text, View } from "react-native";
 
 import icons from "@/constants/icons";
@@ -34,10 +34,8 @@ const TabIcon = ({
 );
 
 const TabsLayout = () => {
-  const { loading, isLogged } = useGlobalStore();
   const socketConnect = useGlobalStore(state => state.socketConnect)
 	const socketClose = useGlobalStore(state => state.socketClose)
-  if (!loading && !isLogged) return <Redirect href="/(auth)/signup" />;
   
   useEffect(() => {
 		socketConnect()
