@@ -1,9 +1,8 @@
 import { Tabs } from "expo-router";
-import { Image, ImageSourcePropType, Text, View } from "react-native";
-
-import icons from "@/constants/icons";
+import { Image, Text, View } from "react-native";
 import { useGlobalStore } from "@/core/store";
 import { useEffect } from "react";
+import { Chat, Home } from "@/constants/icons";
 
 const TabIcon = ({
   focused,
@@ -11,16 +10,11 @@ const TabIcon = ({
   title,
 }: {
   focused: boolean;
-  icon: ImageSourcePropType;
+  icon: JSX.Element;
   title: string;
 }) => (
   <View className="flex-1 mt-3 flex flex-col items-center">
-    <Image
-      source={icon}
-      tintColor={focused ? "#0061FF" : "#666876"}
-      resizeMode="contain"
-      className="size-6"
-    />
+    {icon}
     <Text
       className={`${
         focused
@@ -34,15 +28,15 @@ const TabIcon = ({
 );
 
 const TabsLayout = () => {
-  const socketConnect = useGlobalStore(state => state.socketConnect)
-	const socketClose = useGlobalStore(state => state.socketClose)
+  const socketConnect = useGlobalStore(state => state.socketConnect);
+  const socketClose = useGlobalStore(state => state.socketClose);
   
   useEffect(() => {
-		socketConnect()
-		return () => {
-			socketClose()
-		}
-	}, [])
+    socketConnect();
+    return () => {
+      socketClose();
+    };
+  }, []);
   
   return (
     <Tabs
@@ -63,7 +57,7 @@ const TabsLayout = () => {
           title: "Chat",
           headerShown: false,
           tabBarIcon: ({ focused }) => (
-            <TabIcon focused={focused} icon={icons.chat} title="Chat" />
+            <TabIcon focused={focused} icon={<Chat/>} title="Chat" />
           ),
         }}
       />
@@ -73,7 +67,7 @@ const TabsLayout = () => {
           title: "Search",
           headerShown: false,
           tabBarIcon: ({ focused }) => (
-            <TabIcon focused={focused} icon={icons.search} title="Searsh" />
+            <TabIcon focused={focused} icon={<Chat/>} title="Search" />
           ),
         }}
       />
@@ -83,7 +77,7 @@ const TabsLayout = () => {
           title: "Posts",
           headerShown: false,
           tabBarIcon: ({ focused }) => (
-            <TabIcon focused={focused} icon={icons.home} title="Posts" />
+            <TabIcon focused={focused} icon={<Home color={focused ? "#0061FF" : "#666876"} />} title="Posts" />
           ),
         }}
       />
@@ -93,7 +87,7 @@ const TabsLayout = () => {
           title: "Reservations",
           headerShown: false,
           tabBarIcon: ({ focused }) => (
-            <TabIcon focused={focused} icon={icons.calendar} title="Reservations" />
+            <TabIcon focused={focused} icon={<Home color={focused ? "#0061FF" : "#666876"} />} title="Reservations" />
           ),
         }}
       />
@@ -103,7 +97,7 @@ const TabsLayout = () => {
           title: "Profile",
           headerShown: false,
           tabBarIcon: ({ focused }) => (
-            <TabIcon focused={focused} icon={icons.person} title="Profile" />
+            <TabIcon focused={focused} icon={<Home color={focused ? "#0061FF" : "#666876"} />} title="Profile" />
           ),
         }}
       />

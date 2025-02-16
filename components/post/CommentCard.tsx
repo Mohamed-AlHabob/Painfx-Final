@@ -1,10 +1,9 @@
 import { View, Text, Pressable, Image} from "react-native";
 import { formatDistanceToNow } from "date-fns";
 import { Link, router } from "expo-router";
-import icons from "@/constants/icons";
 import { Avatar } from "../ui/avatar";
 import { Skeleton } from "../global/skeleton";
-import { useGlobalStore } from "@/core/store";
+import { Chat } from "@/constants/icons";
 
 interface Comment {
   id: string;
@@ -72,7 +71,7 @@ export const CommentCard = ({ comment, postId }: CommentCardProps) => {
                   accessibilityRole="button"
                   accessibilityLabel="Reply to comment"
                 >
-                  <Image source={icons.chat} className="size-4" />
+                  <Chat/>
                   <Text className="ml-2 text-gray-500 text-xs">Reply</Text>
                 </Pressable>
               </View>

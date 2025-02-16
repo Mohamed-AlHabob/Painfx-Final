@@ -8,14 +8,13 @@ import {
 } from "react-native";
 import { Link, router } from "expo-router";
 
-import icons from "@/constants/icons";
-
 import Search from "@/components/Search";
 import Filters from "@/components/global/Filters";
 import NoResults from "@/components/global/NoResults"
 import { useGlobalStore } from "@/core/store";
 import { Avatar } from "@/components/ui/avatar";
 import React from "react";
+import { Bell } from "@/constants/icons";
 
 const Home = () => {
   const { user } = useGlobalStore();
@@ -66,11 +65,13 @@ const Home = () => {
                 </View>
               </View>
               <Link href={"/notification"}>
-              <Image source={icons.bell} className="size-6" />
+              <Bell />
               </Link>
             </View>
 
-            <Search />
+            <Search searchQuery={""} onSearchChange={function (text: string): void {
+              throw new Error("Function not implemented.");
+            } } />
 
             <View className="my-5">
               <View className="flex flex-row items-center justify-between">

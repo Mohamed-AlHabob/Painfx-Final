@@ -17,8 +17,8 @@ import { Avatar } from "@/components/ui/avatar";
 import { Message } from "@/core/types";
 import { useNetworkStatus } from "@/core/utils/network";
 import { cacheData, getCachedData } from "@/core/utils/cache";
-import icons from "@/constants/icons";
 import { Input } from "@/components/global/Input";
+import { Check } from "@/constants/icons";
 
 const ChatPage: React.FC = () => {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -125,7 +125,7 @@ const ChatPage: React.FC = () => {
         {item.status === "pending" && (
           <View className="px-2 py-1 flex-row items-center justify-between border-t border-gray-100 mt-3">
             <Pressable accessibilityRole="button" accessibilityLabel="Message info">
-              <Image source={icons.info} className="size-3" />
+              <Check/>
             </Pressable>
           </View>
         )}

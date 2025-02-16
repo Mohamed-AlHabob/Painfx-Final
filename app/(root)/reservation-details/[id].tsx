@@ -2,11 +2,11 @@ import { FlatList, Image, Text, TouchableOpacity, View, Dimensions, Platform, Re
 import { router, useLocalSearchParams } from "expo-router";
 import { format } from "date-fns";
 import { useCallback, useEffect, useState } from "react";
-import icons from "@/constants/icons";
 import images from "@/constants/images";
 import { ENDPOINTS } from "@/core/config";
 import api from "@/core/api";
 import { Avatar } from "@/components/ui/avatar";
+import { Chat, CheckBadge, IDuotoneBlack, MegaPhone } from "@/constants/icons";
 
 interface ReservationDetails {
   id: string;
@@ -108,7 +108,7 @@ const ReservationDetails = () => {
             onPress={() => router.back()}
             className="flex flex-row bg-primary-200 rounded-full size-11 items-center justify-center"
           >
-            <Image source={icons.backArrow} className="size-5" />
+            <IDuotoneBlack />
           </TouchableOpacity>
         </View>
       </View>
@@ -131,18 +131,18 @@ const ReservationDetails = () => {
         </View>
 
         <View className="flex flex-row items-center gap-2">
-          <Image source={icons.star} className="size-5" />
+          <CheckBadge/>
           <Text className="text-black-200 text-sm mt-1 font-rubik-medium">{reservation.status}</Text>
         </View>
       </View>
 
       <View className="flex flex-row items-center mt-5">
         <View className="flex flex-row items-center justify-center bg-primary-100 rounded-full size-10">
-          <Image source={icons.calendar} className="size-4" />
+          <Chat/>
         </View>
         <Text className="text-black-300 text-sm font-rubik-medium ml-2">{formattedDate}</Text>
         <View className="flex flex-row items-center justify-center bg-primary-100 rounded-full size-10 ml-7">
-          <Image source={icons.chat} className="size-4" />
+        <Chat/>
         </View>
         <Text className="text-black-300 text-sm font-rubik-medium ml-2">{formattedTime}</Text>
       </View>
@@ -152,7 +152,6 @@ const ReservationDetails = () => {
 
         <View className="flex flex-row items-center justify-between mt-4">
           <View className="flex flex-row items-center">
-
             <Avatar
               src={reservation.patient.user.profile.avatar}
               fallback={reservation.patient.user.first_name.charAt(0) || "N"}
@@ -172,7 +171,7 @@ const ReservationDetails = () => {
         <View className="mt-7">
           <Text className="text-black-300 text-xl font-rubik-bold">Location</Text>
           <View className="flex flex-row items-center justify-start mt-4 gap-2">
-            <Image source={icons.location} className="w-7 h-7" />
+            <MegaPhone />
             <Text className="text-black-200 text-sm font-rubik-medium">{reservation.clinic.address}</Text>
           </View>
 

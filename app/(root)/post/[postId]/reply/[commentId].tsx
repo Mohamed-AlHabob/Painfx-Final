@@ -10,10 +10,10 @@ import {
   ActivityIndicator,
 } from "react-native";
 import { router, useLocalSearchParams } from "expo-router";
-import icons from "@/constants/icons";
 import { replyToComment, getCommentById } from "@/core/api";
 import { CommentCard } from "@/components/post/CommentCard";
 import { Input } from "@/components/global/Input";
+import { Bell, IDuotoneBlack } from "@/constants/icons";
 
 interface Comment {
   id: string;
@@ -131,13 +131,13 @@ export default function ReplyScreen() {
                   onPress={() => router.back()}
                   className="flex flex-row bg-primary-200 rounded-full size-11 items-center justify-center"
                 >
-                  <Image source={icons.backArrow} className="size-5" />
+                  <IDuotoneBlack />
                 </TouchableOpacity>
 
                 <Text className="text-base mr-2 text-center font-rubik-medium text-black-300">
                   {parentComment.user.first_name} {parentComment.user.last_name}
                 </Text>
-                <Image source={icons.bell} className="w-6 h-6" />
+                <Bell/>
               </View>
             </View>
             <CommentCard comment={parentComment} postId={postId} />

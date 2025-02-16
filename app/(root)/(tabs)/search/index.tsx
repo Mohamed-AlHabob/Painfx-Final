@@ -6,16 +6,15 @@ import {
   Text,
   TouchableOpacity,
   View,
-  Keyboard,
   Pressable,
 } from "react-native";
 import { router } from "expo-router";
 
-import icons from "@/constants/icons";
 import Search from "@/components/Search";
 import Filters from "@/components/global/Filters";
 import NoResults from "@/components/global/NoResults";
 import { useGlobalStore } from "@/core/store";
+import { Bell, IDuotoneBlack } from "@/constants/icons";
 
 const Explore = () => {
   const [loading, setLoading] = useState<boolean>(true);
@@ -115,13 +114,13 @@ const Explore = () => {
                 onPress={() => router.back()}
                 className="flex flex-row bg-primary-200 rounded-full size-11 items-center justify-center"
               >
-                <Image source={icons.backArrow} className="size-5" />
+                <IDuotoneBlack/>
               </TouchableOpacity>
 
               <Text className="text-base mr-2 text-center font-rubik-medium text-black-300">
                 Search for Your Ideal Home
               </Text>
-              <Image source={icons.bell} className="w-6 h-6" />
+              <Bell/>
             </View>
             <Search
               searchQuery={searchQuery}

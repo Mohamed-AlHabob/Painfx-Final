@@ -1,6 +1,6 @@
+import { Check } from "@/constants/icons";
 import { useState, useCallback } from "react";
 import { View, TextInput, Pressable, ActivityIndicator, Image } from "react-native";
-import icons from "@/constants/icons";
 
 interface InputProps {
   onSubmit: (text: string) => void;
@@ -39,7 +39,7 @@ export const Input = ({ onSubmit,className, isSubmitting = false, placeholder = 
           {isSubmitting ? (
             <ActivityIndicator size="small" color="#ffffff" />
           ) : (
-            <Image source={icons.send} className="size-6" tintColor="#ffffff" />
+            <Check/>
           )}
         </Pressable>
       </View>

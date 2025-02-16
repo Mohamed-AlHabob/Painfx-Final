@@ -40,7 +40,7 @@ const Reservations = () => {
   }, [fetchReservations])
 
   const handleRservationPress = useCallback((id: string) => {
-    router.push(`/reservations/${id}`);
+    router.push(`/reservation-details/${id}`);
   }, [])
 
   const renderItem = useCallback(({ item }) => <ReservationCard reservation={item} onCancel={function (id: string): void {

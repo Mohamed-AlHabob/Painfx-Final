@@ -1,16 +1,11 @@
 import React from "react";
-import { View, Text, Image } from "react-native";
-
-import images from "@/constants/images";
+import { View, Text } from "react-native";
+import { Empty } from "@/constants/icons";
 
 const NoResults = () => {
   return (
     <View className="flex items-center my-5">
-      <Image
-        source={images.noResult}
-        className="w-11/12 h-80"
-        resizeMode="contain"
-      />
+      <Empty />
       <Text className="text-2xl font-rubik-bold text-black-300 mt-5">
         No Result
       </Text>

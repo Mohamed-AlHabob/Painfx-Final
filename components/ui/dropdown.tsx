@@ -1,6 +1,6 @@
+import { IDuotoneBlack } from "@/constants/icons";
 import React, { useState, useRef, useEffect } from "react";
 import { View, Pressable, Text, Image, Animated } from "react-native";
-import icons from "@/constants/icons";
 
 interface DropdownMenuProps {
   options: { label: string; value: string }[];
@@ -61,11 +61,7 @@ export const DropdownMenu = ({ options, onSelect, placeholder = "Select an optio
         <Text className="flex-1 bg-gray-100 rounded-full px-4 py-2 text-gray-600">
           {selectedOption ? selectedOption.label : placeholder}
         </Text>
-        <Image
-          source={isOpen ? icons.backArrow : icons.rightArrow}
-          className="w-6 h-6 ml-2"
-          tintColor="#6B7280"
-        />
+              <IDuotoneBlack/>
       </Pressable>
 
       <Animated.View

@@ -1,8 +1,6 @@
 import React, { useState } from "react";
-import { SafeAreaView } from "react-native-safe-area-context";
 import {
   Alert,
-  Image,
   ScrollView,
   Text,
   TouchableOpacity,
@@ -10,11 +8,11 @@ import {
   TextInput,
 } from "react-native";
 import { router } from "expo-router";
-import images from "@/constants/images";
-import icons from "@/constants/icons";
 import { login } from "@/core/api";
 import { setAuthTokens } from "@/core/auth";
 import { useGlobalStore } from "@/core/store";
+import { Google } from "@/constants/icons";
+import { Logo } from "@/constants/icons/logo";
 
 const Auth = () => {
   const { fetchUser } = useGlobalStore()
@@ -69,12 +67,7 @@ const Auth = () => {
           height: "100%",
         }}
       >
-        <Image
-          source={images.onboarding}
-          className="w-full h-2/6 my-4"
-          resizeMode="contain"
-        />
-
+        <Logo className="w-full h-1/6 my-4"/>
         <View className="px-10">
           <Text className="text-base text-center uppercase font-rubik text-black-200">
             Welcome To PainFX
@@ -93,31 +86,29 @@ const Auth = () => {
             className="bg-white shadow-md shadow-zinc-300 rounded-full w-full py-4 mt-5"
           >
             <View className="flex flex-row items-center justify-center">
-              <Image
-                source={icons.google}
-                className="w-5 h-5"
-                resizeMode="contain"
-              />
+              <Google />
               <Text className="text-lg font-rubik-medium text-black-300 ml-2">
                 Continue with Google
               </Text>
             </View>
           </TouchableOpacity>
           <TextInput
-            className="bg-gray-100 rounded-full w-full py-3 px-5 mt-5"
-            placeholder="Email"
-            value={email}
-            onChangeText={setEmail}
-          />
+             className="bg-gray-100 rounded-full w-full py-3 px-5 mt-5"
+             placeholder="Email"
+             value={email}
+             onChangeText={setEmail}
+             keyboardType="email-address"
+             autoCapitalize="none"
+           />           
 
-          <TextInput
-            className="bg-gray-100 rounded-full w-full py-3 px-5 mt-5"
-            placeholder="Password"
-            secureTextEntry
-            value={password}
-            onChangeText={setPassword}
-          />
-
+           <TextInput
+             className="bg-gray-100 rounded-full w-full py-3 px-5 mt-5"
+             placeholder="Password"
+             secureTextEntry
+             value={password}
+             onChangeText={setPassword}
+             autoCapitalize="none"
+           />
           <TouchableOpacity
             onPress={handleLogin}
             className="bg-primary-300 rounded-full w-full py-4 mt-5"

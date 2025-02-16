@@ -10,9 +10,9 @@ import {
 import { useLocalSearchParams, router } from "expo-router";
 import { getDoctorById } from "@/core/api";
 import { Avatar } from "@/components/ui/avatar";
-import icons from "@/constants/icons";
 import Filters from "@/components/global/Filters";
 import NoResults from "@/components/global/NoResults";
+import { Bell, IDuotoneBlack } from "@/constants/icons";
 
 const DoctorProfile = () => {
   const { id } = useLocalSearchParams();
@@ -87,13 +87,13 @@ const DoctorProfile = () => {
                 onPress={() => router.back()}
                 className="flex flex-row bg-primary-200 rounded-full size-11 items-center justify-center"
               >
-                <Image source={icons.backArrow} className="size-5" />
+                <IDuotoneBlack/>
               </TouchableOpacity>
 
               <Text className="text-base mr-2 text-center font-rubik-medium text-black-300">
               {doctor.user.first_name} {doctor.user.last_name}
               </Text>
-              <Image source={icons.bell} className="w-6 h-6" />
+              <Bell />
             </View>
 
             <View className="items-center p-6">

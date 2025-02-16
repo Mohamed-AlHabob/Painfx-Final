@@ -1,20 +1,19 @@
 import {
   Alert,
   Image,
-  ImageSourcePropType,
   ScrollView,
   Text,
   TouchableOpacity,
   View,
 } from "react-native";
-import icons from "@/constants/icons";
 import { useGlobalStore } from "@/core/store";
 import { removeAuthTokens } from "@/core/auth";
 import { Link } from "expo-router";
+import { Bell, CreditCard, IDuotoneBlack, Logout } from "@/constants/icons";
 
 
 interface SettingsItemProp {
-  icon: ImageSourcePropType;
+  icon: JSX.Element;
   title: string;
   onPress?: () => void;
   textStyle?: string;
@@ -24,35 +23,35 @@ interface SettingsItemProp {
 const settings = [
   {
     title: "My Bookings",
-    icon: icons.calendar,
+    icon: <Bell/>,
   },
   {
     title: "Payments",
-    icon: icons.wallet,
+    icon: <CreditCard/>,
   },
   {
     title: "Profile",
-    icon: icons.person,
+    icon: <Bell/>,
   },
   {
     title: "Notifications",
-    icon: icons.bell,
+    icon:<Bell/>,
   },
   {
     title: "Security",
-    icon: icons.shield,
+    icon: <Bell/>,
   },
   {
     title: "Language",
-    icon: icons.language,
+    icon: <Bell/>,
   },
   {
     title: "Help Center",
-    icon: icons.info,
+    icon: <Bell/>,
   },
   {
     title: "Invite Friends",
-    icon: icons.people,
+    icon: <CreditCard/>,
   },
 ];
 
@@ -69,13 +68,13 @@ const SettingsItem = ({
     className="flex flex-row items-center justify-between py-3"
   >
     <View className="flex flex-row items-center gap-3">
-      <Image source={icon} className="size-6" />
+      {icon}
       <Text className={`text-lg font-rubik-medium text-black-300 ${textStyle}`}>
         {title}
       </Text>
     </View>
 
-    {showArrow && <Image source={icons.rightArrow} className="size-5" />}
+    {showArrow && <IDuotoneBlack />}
   </TouchableOpacity>
 );
 
@@ -106,7 +105,7 @@ const Profile = () => {
         <View className="flex flex-row items-center justify-between mt-5">
           <Text className="text-xl font-rubik-bold text-black-300">Profile</Text>
           <Link href={"/notification"}>
-            <Image source={icons.bell} className="size-6" />
+          <Bell/>
           </Link>
         </View>
 
@@ -120,7 +119,7 @@ const Profile = () => {
             </View>
            )}
             <TouchableOpacity className="absolute bottom-11 right-2">
-              <Image source={icons.edit} className="size-9" />
+            <CreditCard/>
             </TouchableOpacity>
 
             <Text className="text-2xl font-rubik-bold mt-2">
@@ -129,8 +128,8 @@ const Profile = () => {
           </View>
         </View>
         <View className="flex flex-col mt-10">
-          <SettingsItem icon={icons.calendar} title="My Bookings" />
-          <SettingsItem icon={icons.wallet} title="Payments" />
+          <SettingsItem icon={<CreditCard/>} title="My Bookings" />
+          <SettingsItem icon={<CreditCard/>} title="Payments" />
         </View>
 
         <View className="flex flex-col mt-5 border-t pt-5 border-primary-200">
@@ -141,7 +140,7 @@ const Profile = () => {
 
         <View className="flex flex-col border-t mt-5 pt-5 border-primary-200">
           <SettingsItem
-            icon={icons.logout}
+            icon={<Logout/>}
             title="Logout"
             textStyle="text-danger"
             showArrow={false}
