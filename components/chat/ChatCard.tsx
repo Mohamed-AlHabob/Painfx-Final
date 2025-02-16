@@ -12,14 +12,12 @@ interface ChatCardProps {
 }
 
 export const ChatCard = ({ item }: ChatCardProps) => {
-  const { id, friend, preview, updated_at, unread = false } = item;
+  const { id, friend, preview, updated_at = false } = item;
   const { first_name, last_name, profile, is_online } = friend;
 
   return (
     <Pressable
-      className={`flex-row bg-white rounded-2xl shadow-sm items-center px-4 py-3 mt-4 mx-4 ${
-        unread ? "opacity-20" : ""
-      } overflow-hidden`}
+      className={`flex-row bg-white rounded-2xl shadow-sm items-center px-4 py-3 mt-4 mx-4 overflow-hidden`}
       onPress={() => router.push(`/(root)/chat/${id}`)}
     >
       <View className="relative">

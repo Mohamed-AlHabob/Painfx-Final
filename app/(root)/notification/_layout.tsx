@@ -5,6 +5,8 @@ import {
   createMaterialTopTabNavigator,
 } from "@react-navigation/material-top-tabs";
 import type { ParamListBase, TabNavigationState } from "@react-navigation/native";
+import { useGlobalStore } from "@/core/store";
+import { useEffect } from "react";
 
 const { Navigator } = createMaterialTopTabNavigator();
 
@@ -16,6 +18,14 @@ export const MaterialTopTabs = withLayoutContext<
 >(Navigator);
 
 const CostomLayout = () => {
+  const socketConnect = useGlobalStore(state => state.socketConnect)
+  const socketClose = useGlobalStore((state: { socketClose: any; }) => state.socketClose)
+  useEffect(() => {
+		socketConnect()
+		return () => {
+			socketClose()
+		}
+	}, [])
   return (
     <MaterialTopTabs
       screenOptions={{
