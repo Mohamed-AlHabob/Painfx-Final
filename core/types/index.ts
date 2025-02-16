@@ -13,6 +13,7 @@ export interface UserProfile {
     role: string
     first_name: string
     last_name: string
+    is_online: boolean
     username: string
     is_active: boolean
     last_login: string

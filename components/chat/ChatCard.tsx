@@ -1,31 +1,38 @@
-import React from "react"
-import { View, Text, Pressable, Image } from "react-native"
-import { formatDistanceToNow } from "date-fns"
-import { router } from "expo-router"
-import { Avatar } from "@/components/ui/avatar"
-import { Ionicons } from "@expo/vector-icons"
-import { Friend } from "@/core/types"
-import { Skeleton } from "../global/skeleton"
+import React from "react";
+import { View, Text, Pressable, Image } from "react-native";
+import { formatDistanceToNow } from "date-fns";
+import { router } from "expo-router";
+import { Avatar } from "@/components/ui/avatar";
+import { Ionicons } from "@expo/vector-icons";
+import { Friend } from "@/core/types";
+import { Skeleton } from "../global/skeleton";
 
 interface ChatCardProps {
-  item: Friend
+  item: Friend;
 }
 
 export const ChatCard = ({ item }: ChatCardProps) => {
-  const { id, friend, preview, updated_at,unread=false } = item
-  const { first_name, last_name, profile } = friend
+  const { id, friend, preview, updated_at, unread = false } = item;
+  const { first_name, last_name, profile, is_online } = friend;
 
   return (
     <Pressable
-      className={`flex-row bg-white rounded-2xl shadow-sm  items-center px-4 py-3 mt-4 mx-4 ${unread ? " opacity-20 " : " text-red-600"} overflow-hidden`}
+      className={`flex-row bg-white rounded-2xl shadow-sm items-center px-4 py-3 mt-4 mx-4 ${
+        unread ? "opacity-20" : ""
+      } overflow-hidden`}
       onPress={() => router.push(`/(root)/chat/${id}`)}
     >
-      <Avatar
-        src={profile.avatar}
-        fallback={first_name.charAt(0) || "N"}
-        size="lg"
-        className="mr-3"
-      />
+      <View className="relative">
+        <Avatar
+          src={profile.avatar}
+          fallback={first_name.charAt(0) || "N"}
+          size="lg"
+          className="mr-3"
+        />
+        {is_online && (
+          <View className="absolute bottom-0 right-2 w-3 h-3 bg-green-500 rounded-full border-2 border-white" />
+        )}
+      </View>
       <View className="flex-1">
         <View className="flex-row justify-between items-center">
           <Text className="font-semibold text-base text-gray-900">
@@ -43,14 +50,14 @@ export const ChatCard = ({ item }: ChatCardProps) => {
         </View>
       </View>
     </Pressable>
-  )
-}
+  );
+};
 
 ChatCard.Skeleton = function ChatSkeleton() {
   return (
     <View className="flex-row bg-white rounded-2xl shadow-sm items-center px-4 py-3 mt-4 mx-4 overflow-hidden">
       <View className="h-12 w-12 rounded-full overflow-hidden mr-3">
-        <Skeleton  />
+        <Skeleton />
       </View>
 
       {/* Content Skeleton */}
