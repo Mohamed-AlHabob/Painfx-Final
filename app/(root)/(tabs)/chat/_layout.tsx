@@ -18,7 +18,15 @@ export const MaterialTopTabs = withLayoutContext<
 
 const Layout = () => {
   return (
-    <MaterialTopTabs>
+    <MaterialTopTabs
+      screenOptions={{
+        tabBarStyle: { backgroundColor: "#fff" },
+        tabBarLabelStyle: { fontSize: 14, fontWeight: "bold" },
+        tabBarIndicatorStyle: { backgroundColor: "#4a90e2", height: 2 },
+        tabBarActiveTintColor: "#4a90e2",
+        tabBarInactiveTintColor: "#888888",
+      }}
+      >
       <MaterialTopTabs.Screen name="index" options={{ title: "All" }} />
       <MaterialTopTabs.Screen name="recent" options={{ title: "Recent" }} />
     </MaterialTopTabs>

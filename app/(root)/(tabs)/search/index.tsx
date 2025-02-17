@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import {
   ActivityIndicator,
   FlatList,
-  Image,
   Text,
   TouchableOpacity,
   View,
@@ -15,6 +14,8 @@ import Filters from "@/components/global/Filters";
 import NoResults from "@/components/global/NoResults";
 import { useGlobalStore } from "@/core/store";
 import { Bell, IDuotoneBlack } from "@/constants/icons";
+import { Back } from "@/constants/icons/back";
+import Header from "@/components/global/header";
 
 const Explore = () => {
   const [loading, setLoading] = useState<boolean>(true);
@@ -109,26 +110,12 @@ const Explore = () => {
         }
         ListHeaderComponent={() => (
           <View className="px-5">
-            <View className="flex flex-row items-center justify-between mt-5">
-              <TouchableOpacity
-                onPress={() => router.back()}
-                className="flex flex-row bg-primary-200 rounded-full size-11 items-center justify-center"
-              >
-                <IDuotoneBlack/>
-              </TouchableOpacity>
-
-              <Text className="text-base mr-2 text-center font-rubik-medium text-black-300">
-                Search for Your Ideal Home
-              </Text>
-              <Bell/>
-            </View>
             <Search
               searchQuery={searchQuery}
               onSearchChange={(text) => {
-                setSearchQuery(text); // Update search query without dismissing the keyboard
+                setSearchQuery(text);
               }}
               onFilterPress={() => {
-                // Handle filter press if needed
               }}
             />
 

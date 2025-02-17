@@ -12,7 +12,7 @@ export const Logo = ({ height = 40, width = 40, className }: LogoProps) => {
     <Image
       height={height}
       width={width}
-      source={logo} // Use the imported image
+      source={logo}
       className={className}
     />
   );
@@ -23,7 +23,7 @@ export const LogoDark = ({ height = 40, width = 40, className }: LogoProps) => {
     <Image
       height={height}
       width={width}
-      source={logo} // Use the imported image
+      source={logo} 
       className={className}
     />
   );

@@ -17,7 +17,7 @@ export const ChatCard = ({ item }: ChatCardProps) => {
 
   return (
     <Pressable
-      className={`flex-row bg-white rounded-2xl shadow-sm items-center px-4 py-3 mt-4 mx-4 overflow-hidden`}
+      className={`flex-row bg-backgroune rounded-2xl shadow-sm items-center px-4 py-3 mt-4 mx-4 overflow-hidden`}
       onPress={() => router.push(`/(root)/chat/${id}`)}
     >
       <View className="relative">

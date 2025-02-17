@@ -98,6 +98,7 @@ const Profile = () => {
   };
 
   return (
+    <View className=" bg-background">
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerClassName="pb-32 px-7"
@@ -148,6 +149,7 @@ const Profile = () => {
           />
         </View>
       </ScrollView>
+      </View>
   );
 };
 

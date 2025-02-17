@@ -49,6 +49,7 @@ const Reservations = () => {
 
 
   return (
+    <View className="bg-background">
       <FlatList
         data={reservations}
         renderItem={renderItem}
@@ -57,16 +58,15 @@ const Reservations = () => {
         showsVerticalScrollIndicator={false}
         ListEmptyComponent={
           loading ? (
-            <ActivityIndicator size="large" className="text-primary-300 mt-5" />
+            <ActivityIndicator size="large" />
           ) : (
-            <View className="flex-1 items-center justify-center p-4">
                <NoResults />
-            </View>
           )
         }
         onRefresh={handleRefresh}
         refreshing={refreshing}
       />
+      </View>
   )
 }
 

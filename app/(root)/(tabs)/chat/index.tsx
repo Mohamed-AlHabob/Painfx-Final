@@ -15,14 +15,14 @@ const ChatsScreen: React.FC = () => {
     );
   }
 
-  // Render empty state
   if (!friendList?.length) {
     return (
-      <View className="flex-1 justify-center items-center">
+      <View className="flex-1 justify-center items-center bg-backgroun">
         <NoResults />
       </View>
     );
   }
+
   return (
     <View>
       <FlatList

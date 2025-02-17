@@ -22,9 +22,9 @@ export const Avatar: React.FC<AvatarProps> = ({ src, fallback, size = "md", clas
   }
 
   return (
-    <View className={`rounded-full bg-primary-100 items-center justify-center ${sizeClass} ${className}`}>
+    <View className={`rounded-full bg-secondary items-center justify-center ${sizeClass} ${className}`}>
       <Text
-        className="text-primary-600 font-semibold"
+        className="text-primary font-semibold"
         style={{ fontSize: size === "sm" ? 14 : size === "md" ? 16 : 18 }}
       >
         {fallback ? fallback.charAt(0).toUpperCase() : "?"}

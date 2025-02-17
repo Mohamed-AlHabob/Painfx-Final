@@ -5,7 +5,7 @@ import { Empty } from "@/constants/icons";
 const NoResults = () => {
   return (
     <View className="flex items-center my-5">
-      <Empty />
+      <Empty primaryColor="" />
       <Text className="text-2xl font-rubik-bold text-black-300 mt-5">
         No Result
       </Text>

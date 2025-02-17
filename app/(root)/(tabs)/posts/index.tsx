@@ -23,21 +23,20 @@ const Posts = () => {
 
 
 
-  // Fetch posts on component mount
   useEffect(() => {
     fetchPosts();
   }, [fetchPosts]);
 
-  // Handle pull-to-refresh
   const handleRefresh = useCallback(async () => {
     setRefreshing(true);
     await fetchPosts();
     setRefreshing(false);
   }, [fetchPosts]);
 
-  const renderItem = useCallback(({ item }) => <PostCard item={item} />, []);
+  const renderItem = useCallback(({ item }) =>  <PostCard item={item} />, []);
 
   return (
+    <View className=" bg-[#ECECEC]">
     <FlatList
       data={posts}
       renderItem={renderItem}
@@ -60,6 +59,7 @@ const Posts = () => {
       onRefresh={handleRefresh}
       refreshing={refreshing}
     />
+    </View>
   );
 };
 

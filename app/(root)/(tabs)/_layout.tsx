@@ -2,7 +2,9 @@ import { Tabs } from "expo-router";
 import { Image, Text, View } from "react-native";
 import { useGlobalStore } from "@/core/store";
 import { useEffect } from "react";
-import { Chat, Home } from "@/constants/icons";
+import { Chat, Home, Message } from "@/constants/icons";
+import { Reservation } from "@/constants/icons/reservation";
+import Header from "@/components/global/header";
 
 const TabIcon = ({
   focused,
@@ -39,7 +41,7 @@ const TabsLayout = () => {
   }, []);
   
   return (
-    <Tabs
+    <><Header /><Tabs
       screenOptions={{
         tabBarShowLabel: false,
         tabBarStyle: {
@@ -57,51 +59,37 @@ const TabsLayout = () => {
           title: "Chat",
           headerShown: false,
           tabBarIcon: ({ focused }) => (
-            <TabIcon focused={focused} icon={<Chat/>} title="Chat" />
+            <TabIcon focused={focused} icon={<Message size={18} bubbleColor={focused ? "#4a90e2" : "#000"} textColor1="#fff" textColor2="#fff" />} title="Chat" />
           ),
-        }}
-      />
+        }} />
       <Tabs.Screen
         name="search"
         options={{
           title: "Search",
           headerShown: false,
           tabBarIcon: ({ focused }) => (
-            <TabIcon focused={focused} icon={<Chat/>} title="Search" />
+            <TabIcon focused={focused} icon={<Chat color="black" />} title="Search" />
           ),
-        }}
-      />
+        }} />
       <Tabs.Screen
         name="posts"
         options={{
           title: "Posts",
           headerShown: false,
           tabBarIcon: ({ focused }) => (
-            <TabIcon focused={focused} icon={<Home color={focused ? "#0061FF" : "#666876"} />} title="Posts" />
+            <TabIcon focused={focused} icon={<Home color={focused ? "#4a90e2" : "#000"} />} title="Posts" />
           ),
-        }}
-      />
+        }} />
       <Tabs.Screen
         name="reservations"
         options={{
           title: "Reservations",
           headerShown: false,
           tabBarIcon: ({ focused }) => (
-            <TabIcon focused={focused} icon={<Home color={focused ? "#0061FF" : "#666876"} />} title="Reservations" />
+            <TabIcon focused={focused} icon={<Reservation className={focused ? "#4a90e2" : "#000"} />} title="Reservations" />
           ),
-        }}
-      />
-      <Tabs.Screen
-        name="profile"
-        options={{
-          title: "Profile",
-          headerShown: false,
-          tabBarIcon: ({ focused }) => (
-            <TabIcon focused={focused} icon={<Home color={focused ? "#0061FF" : "#666876"} />} title="Profile" />
-          ),
-        }}
-      />
-    </Tabs>
+        }} />
+    </Tabs></>
   );
 };
 

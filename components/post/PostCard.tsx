@@ -1,12 +1,12 @@
 import { View, Text, Pressable, Image } from "react-native";
 import { formatDistanceToNow } from "date-fns";
-import { Link, router } from "expo-router";
+import { router } from "expo-router";
 import MediaGrid from "./MediaAttachment";
 import { Avatar } from "../ui/avatar";
 import { useState } from "react";
 import { incrementPostViewCount, likePost, unlikePost } from "@/core/api";
 import { Skeleton } from "../global/skeleton";
-import { About, Bell, Chat, Like, Unlike } from "@/constants/icons";
+import { About, Bell, Chat, Like, Message, Unlike } from "@/constants/icons";
 
 interface PostCardProps {
   item: {
@@ -73,12 +73,12 @@ export const PostCard = ({ item }: PostCardProps) => {
   };
 
   const handleViewPress = async () => {
-    await incrementPostViewCount(item.id);
     router.push(`/(root)/post/${item.id}`);
+    await incrementPostViewCount(item.id);
   };
 
   return (
-    <View className="bg-white rounded-2xl shadow-sm mt-4 mx-4 overflow-hidden">
+    <View className="bg-card rounded-2xl shadow-sm mt-4 mx-4 overflow-hidden">
       <Pressable onPress={handleProfilePress} className="flex-row items-center p-4">
         <Avatar
           src={item.doctor.user.profile.avatar}
@@ -87,10 +87,10 @@ export const PostCard = ({ item }: PostCardProps) => {
         />
         <View className="ml-3 flex-1">
           <View className="flex-row items-center flex-wrap">
-            <Text className="font-semibold text-gray-900">
+            <Text className="font-semibold text-card-foreground">
               {item.doctor.user.first_name} {item.doctor.user.last_name}
             </Text>
-            <Text className="text-gray-500 text-sm ml-2">
+            <Text className="text-card-foreground text-sm ml-2">
               • {item.doctor.specialization?.name || "General"}
             </Text>
           </View>
@@ -102,7 +102,7 @@ export const PostCard = ({ item }: PostCardProps) => {
 
       <Pressable onPress={handleViewPress} className="px-4 pb-3">
         {item.title && (
-          <Text className="text-gray-900 font-medium mb-2">{item.title}</Text>
+          <Text className="text-card-foreground font-medium mb-2">{item.title}</Text>
         )}
         {item.content && (
           <Text numberOfLines={3} className="text-gray-600 text-sm leading-5">
@@ -118,20 +118,20 @@ export const PostCard = ({ item }: PostCardProps) => {
       <View className="px-4 py-3 flex-row items-center justify-between border-t border-gray-100 mt-3">
         <View className="flex-row items-center space-x-6 gap-4">
           <Pressable className="flex-row items-center" onPress={handleLikePress}>
-            {isLiked ? <Unlike /> : <Like />}
+            {isLiked ? <Unlike fillColor="#4a90e2" /> : <Like />}
             <Text className="ml-2 text-gray-600 text-sm">{likesCount}</Text>
           </Pressable>
           <Pressable className="flex-row items-center" onPress={handleViewPress}>
-            <Bell />
+            <Message size={18} bubbleColor="#4a90e2" textColor1="#fff" textColor2="#fff" />
             <Text className="ml-2 text-gray-600 text-sm">{item.view_count}</Text>
           </Pressable>
           <Pressable className="flex-row items-center" onPress={handleCommentPress}>
-            <Chat />
+            <Chat color="#4a90e2" size={15} />
             <Text className="ml-2 text-gray-600 text-sm">{item.comments_count}</Text>
           </Pressable>
         </View>
         <Pressable>
-          <About />
+          <About size={19} color="#4a90e2" />
         </Pressable>
       </View>
     </View>
@@ -140,7 +140,7 @@ export const PostCard = ({ item }: PostCardProps) => {
 
 PostCard.Skeleton = function ItemSkeleton() {
   return (
-    <View className="bg-white rounded-2xl shadow-sm mt-4 mx-4 p-4">
+    <View className="bg-card rounded-2xl shadow-sm mt-4 mx-4 p-4">
       <View className="flex-row items-center">
         <View className="size-12 rounded-full overflow-hidden">
           <Skeleton />

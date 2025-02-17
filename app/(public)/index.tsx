@@ -69,10 +69,6 @@ const Auth = () => {
       >
         <Logo className="w-full h-1/6 my-4"/>
         <View className="px-10">
-          <Text className="text-base text-center uppercase font-rubik text-black-200">
-            Welcome To PainFX
-          </Text>
-
           <Text className="text-3xl font-rubik-bold text-black-300 text-center mt-2">
             Let's Get You Closer To {"\n"}
             <Text className="text-primary-300">Your Clinit</Text>
@@ -111,9 +107,9 @@ const Auth = () => {
            />
           <TouchableOpacity
             onPress={handleLogin}
-            className="bg-primary-300 rounded-full w-full py-4 mt-5"
+            className="bg-primary rounded-full w-full py-4 mt-5"
           >
-            <Text className="text-lg font-rubik-medium text-white text-center">
+            <Text className="text-lg font-rubik-medium text-primary-foreground text-center">
               Login with Email
             </Text>
           </TouchableOpacity>

@@ -1,65 +1,47 @@
-import { View, TextInput, StyleSheet, Pressable } from "react-native"
-import { Ionicons } from "@expo/vector-icons"
+import { View, Pressable, Text } from "react-native"
 import { router } from "expo-router"
+import { Bell, PersonalDevelopment } from "@/constants/icons"
+import { Avatar } from "../ui/avatar"
+import { useGlobalStore } from "@/core/store";
 
-export default function Header() {
+interface HeaderProps {
+  title?: string;
+}
+
+export default function Header({ title }: HeaderProps) {
+  const { user } = useGlobalStore();
+
   return (
-    <View style={styles.container}>
-      <Pressable onPress={() => router.push("/stats")}>
-        <Ionicons name="stats-chart" size={24} color="#000" />
+    <View className="flex flex-row bg-background items-center justify-between px-4 pb-2">
+      <Pressable onPress={() => router.push("/(root)/profile")}>
+      <View className="flex flex-row">
+              <Avatar
+                   src={user?.profile.avatar}
+                   fallback={user?.first_name.charAt(0) || "N"}
+                   size="lg"
+                 />
+                <View className="flex flex-col items-start ml-2 justify-center">
+                  {/* <Text className="text-xs font-rubik text-black-100">
+                    Good Morning
+                  </Text> */}
+                  <Text className="text-base font-rubik-medium text-black-300">
+                    {user?.first_name} {user?.last_name}
+                  </Text>
+                </View>
+              </View>
       </Pressable>
+      <Text className="text-base font-rubik-medium text-black-300">
+        {/* {title || "PainFX"} */}
+      </Text>
 
-      <View style={styles.searchContainer}>
-        <Ionicons name="search" size={20} color="#71717a" style={styles.searchIcon} />
-        <TextInput placeholder="Weekly Music Journey" placeholderTextColor="#71717a" style={styles.searchInput} />
-      </View>
-
-      <View style={styles.rightIcons}>
-        <Pressable onPress={() => router.push("/notification")} style={styles.iconButton}>
-          <Ionicons name="notifications-outline" size={24} color="#000" />
+      <View className="flex flex-row items-center">
+        <Pressable onPress={() => router.push("/notification")}>
+          <Bell bellColor="#4a90e2" notificationColor="#ddd" size={22} />
         </Pressable>
-        <Pressable onPress={() => router.push("/profile")} style={styles.iconButton}>
-          <Ionicons name="ellipsis-horizontal" size={24} color="#000" />
+        <Pressable onPress={() => router.push("/profile")} className="ml-6">
+          <PersonalDevelopment strokeColor="black"  size={22}  />
         </Pressable>
       </View>
     </View>
-  )
+  );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flexDirection: "row",
-    alignItems: "center",
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    backgroundColor: "#fff",
-    height: 56,
-  },
-  searchContainer: {
-    flex: 1,
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: "#D9D9D9",
-    marginHorizontal: 12,
-    paddingHorizontal: 12,
-    borderRadius: 8,
-    height: 36,
-  },
-  searchIcon: {
-    marginRight: 8,
-  },
-  searchInput: {
-    flex: 1,
-    color: "#000",
-    fontSize: 15,
-    height: "100%",
-  },
-  rightIcons: {
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  iconButton: {
-    marginLeft: 16,
-  },
-})
-
